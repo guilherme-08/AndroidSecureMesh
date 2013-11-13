@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Android Secure Mesh</string>
+    <string name="action_settings">Settings</string>
+    <string name="greetings">Welcome to the Mesh!</string>
+    <string name="insert_username">Please insert your username</string>
+    <string name="username">Username</string>
+    <string name="login">Get into the mesh</string>
+    <string name="title_activity_main_menu">Main Menu</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="createChat">Create Chat</string>
+    <string name="enterChat">Enter Chat</string>
+    <string name="title_activity_create_chat">Create Chat</string>
+    <string name="chatName">Chat Name</string>
+    <string name="title_activity_enter_chat_room">Enter in Chat Room</string>
+
+</resources>
