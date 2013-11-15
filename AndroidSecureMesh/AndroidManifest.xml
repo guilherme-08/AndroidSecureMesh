@@ -48,6 +48,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pt.up.fe.ssin.androidsecuremesh.MainMenu" />
         </activity>
+        <activity
+            android:name="pt.up.fe.ssin.androidsecuremesh.ui.ChatRoom"
+            android:label="@string/title_activity_chat_room"
+            android:parentActivityName="pt.up.fe.ssin.androidsecuremesh.ui.MainMenu" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pt.up.fe.ssin.androidsecuremesh.ui.MainMenu" />
+        </activity>
     </application>
 
 </manifest>
