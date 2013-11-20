@@ -1,9 +1,12 @@
 package pt.up.fe.ssin.androidsecuremesh.utils;
 
+import java.util.List;
+
 public class Chat {
 
 	private String name;
 	private String key;
+	private static List<User> usersList;
 	
 	public Chat(String name)
 	{
@@ -30,6 +33,14 @@ public class Chat {
 	{
 		return name;
 		
+	}
+
+	public static List<User> getUsersList() {
+		return usersList;
+	}
+
+	public void addToUsersList(User user) {
+		this.usersList.add(user);
 	}
 	
 }

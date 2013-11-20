@@ -17,24 +17,27 @@ public class MainMenu extends Activity {
 	private Button createChat;
 	private Button enterChat;
 	public static String userName;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_menu);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
+
 		specialGreetings = (TextView) findViewById(R.id.specialGreetings);
 
-		Intent intent = getIntent();
-		userName = intent.getStringExtra(Login.userName);
+		if(userName == null)
+		{
+			Intent intent = getIntent();
+			userName = intent.getStringExtra(Login.userName);
+		}
 		specialGreetings.setText("Hello, " + userName + "!");
-		
+
 		createChat = (Button) findViewById(R.id.createChat);
 		enterChat = (Button) findViewById(R.id.enterChat);
-		
-		
+
+
 		createChat.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -44,8 +47,8 @@ public class MainMenu extends Activity {
 				startActivity(intent);
 			}
 		});
-		
-		
+
+
 		enterChat.setOnClickListener(new View.OnClickListener() {
 
 			@Override

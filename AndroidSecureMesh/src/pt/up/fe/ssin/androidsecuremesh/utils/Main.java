@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Main {
 
-	private List<Chat> chatList;
+	private static List<Chat> chatList;
 	private List<User> userList;
 	
 	public Main()
@@ -14,7 +14,7 @@ public class Main {
 		userList = new ArrayList<User>();
 	}
 	
-	public List<Chat> getChatList() {
+	public static List<Chat> getChatList() {
 		return chatList;
 	}
 

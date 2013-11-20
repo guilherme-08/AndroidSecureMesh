@@ -1,14 +1,13 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.os.Build;
 
-public class ChatRoom extends Activity {
+public class ChatRoom extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +15,11 @@ public class ChatRoom extends Activity {
 		setContentView(R.layout.chat_room);
 		// Show the Up button in the action bar.
 		setupActionBar();
+
+
+
 	}
+
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -28,12 +31,6 @@ public class ChatRoom extends Activity {
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.chat_room, menu);
-		return true;
-	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

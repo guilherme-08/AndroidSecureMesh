@@ -8,6 +8,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -60,8 +61,9 @@ public class EnterChatRoom extends Activity {
 				.setCancelable(false)
 				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-
-
+						Intent intent = new Intent(EnterChatRoom.this, ChatRoom.class);
+						//intent.putExtra(userName, username.getText().toString());
+						startActivity(intent);
 					}
 				})
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {
