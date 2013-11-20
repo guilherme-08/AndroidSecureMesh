@@ -15,5 +15,6 @@
     <string name="chatName">Chat Name</string>
     <string name="title_activity_enter_chat_room">Enter in Chat Room</string>
     <string name="title_activity_chat_room">Chat Room</string>
+    <string name="sendMessage">Send Message</string>
 
 </resources>

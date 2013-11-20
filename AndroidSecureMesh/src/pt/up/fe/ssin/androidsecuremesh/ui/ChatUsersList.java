@@ -9,7 +9,9 @@ import pt.up.fe.ssin.androidsecuremesh.utils.User;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.webkit.WebView.FindListener;
 import android.widget.ArrayAdapter;
@@ -26,16 +28,27 @@ public class ChatUsersList extends Fragment {
 	{
 		View view = inflater.inflate(R.layout.chat_users_list, container, false);
 		
-		/*usersListView = (ListView) view.findViewById(R.id.usersList);
+		usersListView = (ListView) view.findViewById(R.id.usersList);
 		usersList = new ArrayList<User>();
-		//view.getContext()??
+		
 		usersListAdapter = new ArrayAdapter<User>(view.getContext(), android.R.layout.simple_list_item_1, usersList);
 		
 		usersListView.setAdapter(usersListAdapter);
 		
+		
+		//Testing examples
 		User u1 = new User("guilha"); User u2 = new User("joao");
 		usersList.add(u1);usersList.add(u2);
-*/		
+		
+		usersListView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		
 		return view;
 	}
 }
