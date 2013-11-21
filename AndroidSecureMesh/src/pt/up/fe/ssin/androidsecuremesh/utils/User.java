@@ -5,7 +5,7 @@ public class User {
 	private String name;
 	private String privateKey;
 	
-	public User(String name)
+	public User(String name) //generate privateKey missing
 	{
 		this.name = name;
 	}

@@ -1,5 +1,6 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
+import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -35,8 +36,10 @@ public class CreateChat extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(CreateChat.this, CreateChat.class);
-				intent.putExtra(userName, userName);
+				Chat chat = new Chat(chatRoomName.getText().toString());
+				Login.main.addToChatList(chat);
+				
+				Intent intent = new Intent(CreateChat.this, EnterChatRoom.class);
 				startActivity(intent);
 				
 			}

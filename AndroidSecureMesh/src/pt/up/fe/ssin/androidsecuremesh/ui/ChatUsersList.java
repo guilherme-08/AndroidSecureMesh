@@ -28,6 +28,7 @@ public class ChatUsersList extends Fragment {
 	{
 		View view = inflater.inflate(R.layout.chat_users_list, container, false);
 		
+		
 		usersListView = (ListView) view.findViewById(R.id.usersList);
 		usersList = new ArrayList<User>();
 		
@@ -35,6 +36,8 @@ public class ChatUsersList extends Fragment {
 		
 		usersListView.setAdapter(usersListAdapter);
 		
+		for(User user: EnterChatRoom.chosenChat.getUsersList())
+			usersList.add(user);
 		
 		//Testing examples
 		User u1 = new User("guilha"); User u2 = new User("joao");

@@ -1,5 +1,6 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
+import pt.up.fe.ssin.androidsecuremesh.utils.Main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +17,15 @@ public class Login extends Activity {
 	private EditText username;
 	private Button getIntoTheMesh;
 	public static String userName = "";
-
+	public static Main main = null;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if(main == null)
+			main = new Main();
 
 		if(!isNetworkAvailable())
 		{
@@ -41,11 +45,16 @@ public class Login extends Activity {
 
 				@Override
 				public void onClick(View v) {
-					//TODO also validate if that username is already being used
+					
 					if(username.getText().toString().equals(""))
 						username.setHintTextColor(getResources().getColor(R.color.redinc));
+					else if(main.containsInUserList(username.getText().toString())){
+						Toast toast = Toast.makeText(getApplicationContext(), "Already exists an user with that username", Toast.LENGTH_LONG);
+						toast.show();
+					}
 					else
 					{
+						main.addToUserList(username.getText().toString());
 						Intent intent = new Intent(Login.this, MainMenu.class);
 						intent.putExtra(userName, username.getText().toString());
 						startActivity(intent);
@@ -55,7 +64,7 @@ public class Login extends Activity {
 
 		}
 	}
-	
+
 	private boolean isNetworkAvailable() {
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

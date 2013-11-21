@@ -2,10 +2,13 @@ package pt.up.fe.ssin.androidsecuremesh.ui;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -86,6 +89,28 @@ public class MainMenu extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
+	    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+			new AlertDialog.Builder(this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle("Logout")
+			.setMessage("Are you sure you really want to leave the mesh?")
+			.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			
+			    @Override
+			    public void onClick(DialogInterface dialog, int which) {
+			    	Login.main.deleteInUserList(userName);
+			    	MainMenu.this.finish();
+			    }
+			
+			})
+			.setNegativeButton("No", null)
+			.show();
+	    }
+    	return super.onKeyDown(keyCode, event);
 	}
 
 }

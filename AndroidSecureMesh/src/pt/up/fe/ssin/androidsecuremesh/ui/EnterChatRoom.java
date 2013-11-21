@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
+import pt.up.fe.ssin.androidsecuremesh.utils.User;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,6 +25,7 @@ public class EnterChatRoom extends Activity {
 	private ListView chatListView;
 	private List<Chat> chatList; //to add chats
 	private ArrayAdapter<Chat> chatListAdapter;
+	public static Chat chosenChat;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +40,12 @@ public class EnterChatRoom extends Activity {
 
 		chatListView.setAdapter(chatListAdapter);
 
+		//Testing examples
 		Chat test = new Chat("Room222"), test2 = new Chat("Soccer");
 		chatList.add(test); chatList.add(test2);
-		//TODO a for with all created chat rooms (Static var somewhere stored)
-
+		
+		for(Chat chat: Login.main.getChatList())
+			chatList.add(chat);
 
 
 		chatListView.setOnItemClickListener(new OnItemClickListener() {
@@ -49,7 +53,7 @@ public class EnterChatRoom extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3)
 			{
-				Chat thechat = chatList.get(position);
+				final Chat thechat = chatList.get(position);
 
 				String message = "Are you sure do you want to enter in the chat room \"" + thechat + "\"?";
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(EnterChatRoom.this);
@@ -61,8 +65,10 @@ public class EnterChatRoom extends Activity {
 				.setCancelable(false)
 				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
+						User me = Login.main.getUserByUsername(MainMenu.userName);
+						thechat.addToUsersList(me);
 						Intent intent = new Intent(EnterChatRoom.this, ChatRoom.class);
-						//intent.putExtra(userName, username.getText().toString());
+						chosenChat = Login.main.getChatByName(thechat.getName());
 						startActivity(intent);
 					}
 				})

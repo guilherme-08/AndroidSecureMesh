@@ -1,12 +1,13 @@
 package pt.up.fe.ssin.androidsecuremesh.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Chat {
 
 	private String name;
 	private String key;
-	private static List<User> usersList;
+	private static List<User> usersList = new ArrayList<User>();
 	
 	public Chat(String name)
 	{
@@ -40,7 +41,8 @@ public class Chat {
 	}
 
 	public void addToUsersList(User user) {
-		this.usersList.add(user);
+		if(!this.usersList.contains(user))
+			this.usersList.add(user);
 	}
 	
 }
