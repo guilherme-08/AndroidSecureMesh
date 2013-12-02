@@ -9,30 +9,41 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".CreateChat" >
 
-    
-    
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginBottom="30dip"
+        android:gravity="center"
         android:text="@string/title_activity_create_chat"
         android:textSize="24.5sp" />
 
-    <TableRow>
+    <TableRow android:gravity="center" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dip"
             android:text="@string/chatName" />
 
         <EditText
             android:id="@+id/chatName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dip"
             android:hint="@string/chatName" />
+    </TableRow>
+
+    <TableRow android:gravity="center" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chatPassword" />
+
+        <EditText
+            android:id="@+id/chatPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/chatPassword"
+            android:inputType="textPassword" />
     </TableRow>
 
     <Button

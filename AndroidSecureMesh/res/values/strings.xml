@@ -12,6 +12,7 @@
     <string name="createChat">Create Chat</string>
     <string name="enterChat">Enter Chat</string>
     <string name="title_activity_create_chat">Create Chat</string>
+    <string name="chatPassword">Chat Key</string>
     <string name="chatName">Chat Name</string>
     <string name="title_activity_enter_chat_room">Enter in Chat Room</string>
     <string name="title_activity_chat_room">Chat Room</string>
