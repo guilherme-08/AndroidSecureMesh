@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/input"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:hint="sup" >
+
+</EditText>
+
+    <Button
+        android:id="@+id/crypt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="crypt" />
+
+    <Button
+        android:id="@+id/toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/decrypt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="decrypt" />
+    
+    <TextView
+        android:id="@+id/output"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="15dp"
+        android:text="output not ready!" >
+
+s</TextView>
+</LinearLayout>
