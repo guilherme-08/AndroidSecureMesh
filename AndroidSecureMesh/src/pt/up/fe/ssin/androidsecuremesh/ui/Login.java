@@ -1,5 +1,7 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
+import java.io.IOException;
+
 import pt.up.fe.ssin.androidsecuremesh.utils.Main;
 import android.app.Activity;
 import android.content.Context;
@@ -24,8 +26,6 @@ public class Login extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if(main == null)
-			main = new Main();
 
 		if(!isNetworkAvailable())
 		{
@@ -35,7 +35,14 @@ public class Login extends Activity {
 
 		else
 		{
-
+			if(main == null){
+				try {
+					main = new Main();
+				} catch (IOException e) {
+					Toast toast = Toast.makeText(getApplicationContext(), "Problem when creating multicastSocket", Toast.LENGTH_LONG);
+					toast.show();
+				}
+			}
 			setContentView(R.layout.login);
 
 			username = (EditText) findViewById(R.id.username);
