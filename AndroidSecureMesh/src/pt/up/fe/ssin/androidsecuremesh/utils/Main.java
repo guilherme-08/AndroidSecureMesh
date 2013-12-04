@@ -1,10 +1,6 @@
 package pt.up.fe.ssin.androidsecuremesh.utils;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -22,7 +18,9 @@ public class Main {
 		userList = new ArrayList<User>();
 		sendDataThread = new SendDataThread();
 		receiveDataThread = new ReceiveDataThread();
-		receiveDataThread.execute();
+		receiveDataThread.start();
+		sendDataThread = new SendDataThread();
+		sendDataThread.start();
 	}
 
 	public List<Chat> getChatList() {
@@ -41,14 +39,8 @@ public class Main {
 			
 			String[] textArray = new String[1];
 			textArray[0] = textToSend;
-			try {
-				if(!sendDataThread.execute(textToSend).get())
-					return false;
-			} catch (InterruptedException e) {
-				return false;
-			} catch (ExecutionException e) {
-				return false;
-			}
+			
+			
 		}
 		else
 		{

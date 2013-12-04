@@ -1,23 +1,15 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.security.Security;
 
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.KeyGenerationParameters;
 import org.bouncycastle.crypto.engines.RSAEngine;
-import org.bouncycastle.crypto.generators.RSAKeyPairGenerator;
-import org.bouncycastle.crypto.params.RSAKeyGenerationParameters;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import pt.up.fe.ssin.androidsecuremesh.utils.Storage;
 import pt.up.fe.ssin.androidsecuremesh.utils.User;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
