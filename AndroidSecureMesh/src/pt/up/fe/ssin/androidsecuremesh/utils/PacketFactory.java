@@ -10,10 +10,10 @@ import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 
 public class PacketFactory {
 	
-	private static final int NameSize = 64;
-	private static final int IntSize = 4;
-	private static final int IPSize = 15;
-	private static final int TextSize = 256;
+	static final int NameSize = 64;
+	static final int IntSize = 4;
+	static final int IPSize = 15;
+	static final int TextSize = 256;
 	
 	public static DatagramPacket createTextPacket(String name, String text, AsymmetricKeyParameter userKey, SecretKeySpec chatKey, InetAddress host, int port)
 	{
@@ -26,7 +26,7 @@ public class PacketFactory {
 		
 		byte[] packet = new byte[IntSize + NameSize + TextSize + IPSize];
 		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
-		byteBuffer.putInt(1);
+	
 		
 		byte[] nameByte = new byte[NameSize];
 		ByteBuffer byteBufferName = ByteBuffer.wrap(nameByte);
@@ -44,6 +44,7 @@ public class PacketFactory {
 		
 		//TODO putKeys
 		
+		byteBuffer.putInt(1);
 		byteBuffer.put(nameByte);
 		byteBuffer.put(textByte);
 		byteBuffer.put(IPByte);

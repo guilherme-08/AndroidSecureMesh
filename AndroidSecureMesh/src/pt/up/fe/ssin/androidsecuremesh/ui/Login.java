@@ -45,6 +45,14 @@ public class Login extends Activity {
 					ReversePacketFactory.ctx = this;
 					
 					PacketFactory packet = new PacketFactory();
+					
+					while (SendDataThread.inetAddress == null)
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					DatagramPacket datagram = PacketFactory.createTextPacket("feup", "seguranca", null, null, SendDataThread.inetAddress, SendDataThread.port);
 					
 					SendDataThread.datagramsArray.add(datagram);

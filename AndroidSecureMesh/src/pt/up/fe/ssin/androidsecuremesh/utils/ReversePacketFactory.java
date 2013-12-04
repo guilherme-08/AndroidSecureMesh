@@ -14,11 +14,11 @@ import android.widget.Toast;
 
 public class ReversePacketFactory {
 	
-	private static final int NameSize = 64;
-	private static final int IPSize = 15;
-	private static final int TextSize = 15;
+	private static final int NameSize = PacketFactory.NameSize;
+	private static final int IPSize = PacketFactory.IPSize;
+	private static final int TextSize = PacketFactory.TextSize;
 	public static Context ctx = null;
-	private static final int IntSize = 4;
+	private static final int IntSize = PacketFactory.IntSize;
 
 	
 //String name, String text, AsymmetricKeyParameter userKey, SecretKeySpec chatKey, InetAddress host, int port
