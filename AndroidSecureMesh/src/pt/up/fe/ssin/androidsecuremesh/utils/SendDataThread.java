@@ -5,19 +5,20 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.os.AsyncTask;
 //		      								  params, progress, return
 public class SendDataThread extends Thread/*AsyncTask<String, Boolean, Boolean>*/{
 
 	private String message;
-	private byte[] data;
-	private InetAddress inetAddress;
-	private int port;
+	public static InetAddress inetAddress;
+	public static int port;
 	private MulticastSocket multicastSocket;
 	private DatagramPacket datagramPacket;
-	private String host;
-
+	public static String host;
+	public static List<DatagramPacket> datagramsArray = new ArrayList<DatagramPacket>();
 
 	@Override
 	public void run() {
@@ -56,22 +57,27 @@ public class SendDataThread extends Thread/*AsyncTask<String, Boolean, Boolean>*
 			success = false;
 		}
 
-		data = message.getBytes();
 
-		datagramPacket = new DatagramPacket(data, data.length, inetAddress, port);
+		
 
-
-		try {
-			multicastSocket.send(datagramPacket);
-		} catch (IOException e) {
-			success = false;
+		while(true)
+		{
+			while(datagramsArray.size() != 0)
+			{
+				try {
+					multicastSocket.send(datagramsArray.get(0));
+					datagramsArray.remove(0);
+				} catch (IOException e) {
+					success = false;
+				}
+			}
 		}
 
-	//	return success;
+		//	return success;
 
 	}
-	
-	
+
+
 
 	/*@Override
 	protected Boolean doInBackground(String... params) {

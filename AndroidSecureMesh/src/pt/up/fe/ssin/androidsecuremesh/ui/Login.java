@@ -1,8 +1,12 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 
 import pt.up.fe.ssin.androidsecuremesh.utils.Main;
+import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
+import pt.up.fe.ssin.androidsecuremesh.utils.ReversePacketFactory;
+import pt.up.fe.ssin.androidsecuremesh.utils.SendDataThread;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +42,12 @@ public class Login extends Activity {
 			if(main == null){
 				try {
 					main = new Main();
+					ReversePacketFactory.ctx = this;
+					
+					PacketFactory packet = new PacketFactory();
+					DatagramPacket datagram = PacketFactory.createTextPacket("feup", "seguranca", null, null, SendDataThread.inetAddress, SendDataThread.port);
+					
+					SendDataThread.datagramsArray.add(datagram);
 				} catch (IOException e) {
 					Toast toast = Toast.makeText(getApplicationContext(), "Problem when creating multicastSocket", Toast.LENGTH_LONG);
 					toast.show();
