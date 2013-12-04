@@ -1,11 +1,11 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 
 public class ChatRoom extends FragmentActivity {
 
