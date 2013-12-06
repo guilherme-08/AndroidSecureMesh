@@ -12,7 +12,6 @@ import java.nio.ByteBuffer;
 import javax.crypto.spec.SecretKeySpec;
 
 
-import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 
 import pt.up.fe.ssin.androidsecuremesh.ui.ChatConversation;
 import pt.up.fe.ssin.androidsecuremesh.ui.EnterChatRoom;

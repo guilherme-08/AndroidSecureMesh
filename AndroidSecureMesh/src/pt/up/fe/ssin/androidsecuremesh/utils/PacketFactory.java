@@ -108,7 +108,6 @@ public class PacketFactory {
 		return datagramPacket;
 	}
 
-	}
 
 
 	public static DatagramPacket sendTextToChat(String chatName, String text, String userName, String key, InetAddress host, int port) //notString
