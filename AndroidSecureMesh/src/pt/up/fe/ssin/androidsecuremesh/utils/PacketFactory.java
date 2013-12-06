@@ -1,12 +1,24 @@
 package pt.up.fe.ssin.androidsecuremesh.utils;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.Arrays;
 
 import javax.crypto.spec.SecretKeySpec;
 
-import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
+import org.spongycastle.crypto.CipherParameters;
+import org.spongycastle.openssl.PEMWriter;
+import org.spongycastle.util.io.pem.PemObject;
+
 
 public class PacketFactory {
 
@@ -16,6 +28,7 @@ public class PacketFactory {
 	static final int IntSize = 4;
 	static final int IPSize = 15;
 	static final int TextSize = 256;
+
 
 
 	public static DatagramPacket newChatPacket(String chatName, InetAddress host, int port)
@@ -49,7 +62,11 @@ public class PacketFactory {
 
 	}
 
-	public static DatagramPacket createTextPacket(String name, String text, AsymmetricKeyParameter userKey, SecretKeySpec chatKey, InetAddress host, int port)
+
+	static final int ChatKeySize = 256;
+	public static final int CHAT_SIZE = NameSize + ChatKeySize + TextSize + IPSize + IntSize;
+
+	public static DatagramPacket createTextPacket(String name, String text, PublicKey ownerKey, SecretKeySpec chatKey, InetAddress host, int port)
 	{
 		String IP = Storage.getIPAddress(true);
 		if(IP == null)
@@ -58,9 +75,8 @@ public class PacketFactory {
 		if(IP.length() <= IPSize)
 			IP += '|';
 
-		byte[] packet = new byte[IntSize + NameSize + TextSize + IPSize];
+		byte[] packet = new byte[IntSize + NameSize + TextSize + ChatKeySize + IPSize];
 		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
-
 
 		byte[] nameByte = new byte[NameSize];
 		ByteBuffer byteBufferName = ByteBuffer.wrap(nameByte);
@@ -71,22 +87,27 @@ public class PacketFactory {
 		ByteBuffer byteBufferText = ByteBuffer.wrap(textByte);
 		byteBufferText.put(text.getBytes());
 
-
 		byte[] IPByte = new byte[IPSize];
 		ByteBuffer byteBufferIP = ByteBuffer.wrap(IPByte);
 		byteBufferIP.put(IP.getBytes());
-
-		//TODO putKeys
+		
+		byte[] chatKeyByte = new byte[ChatKeySize];
+		ByteBuffer.wrap(chatKeyByte).put(chatKey.getEncoded());
+		
+		CryptoUtils.encrypt(ownerKey, chatKeyByte);
+		
 
 		byteBuffer.putInt(1);
 		byteBuffer.put(nameByte);
 		byteBuffer.put(textByte);
 		byteBuffer.put(IPByte);
-
-
+		byteBuffer.put(chatKeyByte);
+		
 		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
 
 		return datagramPacket;
+	}
+
 	}
 
 

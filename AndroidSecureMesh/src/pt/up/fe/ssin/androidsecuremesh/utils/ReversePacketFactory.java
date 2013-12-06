@@ -1,10 +1,16 @@
 package pt.up.fe.ssin.androidsecuremesh.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 
 import javax.crypto.spec.SecretKeySpec;
+
 
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 
@@ -18,6 +24,7 @@ import android.widget.Toast;
 
 public class ReversePacketFactory {
 
+	private static final int chatKeySize = PacketFactory.ChatKeySize;
 	private static final int NameSize = PacketFactory.NameSize;
 	private static final int IPSize = PacketFactory.IPSize;
 	private static final int TextSize = PacketFactory.TextSize;

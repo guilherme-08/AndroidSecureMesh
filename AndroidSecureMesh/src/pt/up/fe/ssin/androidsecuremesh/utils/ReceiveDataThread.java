@@ -25,7 +25,7 @@ public class ReceiveDataThread  extends Thread/*AsyncTask<Void, Boolean, Boolean
 		
 		super.run();
 
-		data = new byte[512];
+		data = new byte[PacketFactory.CHAT_SIZE];
 		datagramPacket = new DatagramPacket(data, data.length);
 		
 		host = "224.0.2.0";

@@ -2,12 +2,16 @@ package pt.up.fe.ssin.androidsecuremesh.utils;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.security.Security;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.http.conn.util.InetAddressUtils;
 
 public class Storage {
+	static {
+	    Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
+	}
 	public static User myData = new User("me");
 
 	

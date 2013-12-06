@@ -7,6 +7,7 @@ import pt.up.fe.ssin.androidsecuremesh.utils.Main;
 import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
 import pt.up.fe.ssin.androidsecuremesh.utils.ReversePacketFactory;
 import pt.up.fe.ssin.androidsecuremesh.utils.SendDataThread;
+import pt.up.fe.ssin.androidsecuremesh.utils.Storage;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -51,7 +52,7 @@ public class Login extends Activity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					DatagramPacket datagram = PacketFactory.createTextPacket("feup", "seguranca", null, null, SendDataThread.inetAddress, SendDataThread.port);
+					DatagramPacket datagram = PacketFactory.createTextPacket("feup", "seguranca", Storage.myData.publicKey, null, SendDataThread.inetAddress, SendDataThread.port);
 					
 					SendDataThread.datagramsArray.add(datagram);
 				} catch (IOException e) {
