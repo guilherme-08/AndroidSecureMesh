@@ -41,8 +41,8 @@ public class EnterChatRoom extends Activity {
 		chatListView.setAdapter(chatListAdapter);
 
 		//Testing examples
-		Chat test = new Chat("Room222"), test2 = new Chat("Soccer");
-		chatList.add(test); chatList.add(test2);
+	/*	Chat test = new Chat("Room222"), test2 = new Chat("Soccer");
+		chatList.add(test); chatList.add(test2);*/
 		
 		for(Chat chat: Login.main.getChatList())
 			chatList.add(chat);

@@ -38,8 +38,8 @@ public class ChatUsersList extends Fragment {
 			usersList.add(user);
 		
 		//Testing examples
-		User u1 = new User("guilha"); User u2 = new User("joao");
-		usersList.add(u1);usersList.add(u2);
+	/*	User u1 = new User("guilha"); User u2 = new User("joao");
+		usersList.add(u1);usersList.add(u2);*/
 		
 		usersListView.setOnTouchListener(new OnTouchListener() {
 			

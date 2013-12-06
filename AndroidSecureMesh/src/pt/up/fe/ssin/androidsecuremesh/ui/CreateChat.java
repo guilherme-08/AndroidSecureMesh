@@ -1,6 +1,10 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
+import java.net.DatagramPacket;
+
 import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
+import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
+import pt.up.fe.ssin.androidsecuremesh.utils.SendDataThread;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -39,8 +43,23 @@ public class CreateChat extends Activity {
 			@Override
 			public void onClick(View v) {
 				Chat chat = new Chat(chatRoomName.getText().toString());
-				chat.setKey(chatRoomKey.getText().toString());
-				Login.main.addToChatList(chat);
+				//chat.setKey(chatRoomKey.getText().toString());
+				
+				
+				while (SendDataThread.inetAddress == null)
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				DatagramPacket datagram = PacketFactory.newChatPacket(chatRoomName.getText().toString(), SendDataThread.inetAddress, SendDataThread.port);
+				
+				SendDataThread.datagramsArray.add(datagram);
+				
+				
+				//Login.main.addToChatList(chat);
+				
 				
 				Intent intent = new Intent(CreateChat.this, EnterChatRoom.class);
 				startActivity(intent);

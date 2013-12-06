@@ -1,7 +1,12 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
+import java.net.DatagramPacket;
 import java.util.ArrayList;
 import java.util.List;
+
+import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
+import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
+import pt.up.fe.ssin.androidsecuremesh.utils.SendDataThread;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +23,7 @@ import android.widget.ListView;
 public class ChatConversation extends Fragment {
 
 	private ListView messagesListView;
-	private List<String> messagesList; //to add messages to the chat
+	public static List<String> messagesList; //to add messages to the chat
 	private ArrayAdapter<String> messagesListAdapter;
 	private EditText currentMessage;
 
@@ -35,7 +40,7 @@ public class ChatConversation extends Fragment {
 		messagesListView.setAdapter(messagesListAdapter);
 
 		//Testing examples
-		messagesList.add("test"); messagesList.add("message2");
+		//messagesList.add("test"); messagesList.add("message2");
 
 		
 		currentMessage = (EditText) view.findViewById(R.id.messageText);
@@ -48,7 +53,20 @@ public class ChatConversation extends Fragment {
 						(keyCode == KeyEvent.KEYCODE_ENTER)) {
 					// Perform action on key press
 					String message = MainMenu.userName + ":" + currentMessage.getText().toString();
-					messagesList.add(message);
+					//messagesList.add(message);
+					
+					while (SendDataThread.inetAddress == null)
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					DatagramPacket datagram = PacketFactory.sendTextToChat(EnterChatRoom.chosenChat.getName(), message, MainMenu.userName, null,SendDataThread.inetAddress, SendDataThread.port);
+					
+					SendDataThread.datagramsArray.add(datagram);
+					
+					
 					currentMessage.setText("");
 					return true;
 				}

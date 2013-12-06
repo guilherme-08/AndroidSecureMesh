@@ -44,8 +44,6 @@ public class Login extends Activity {
 					main = new Main();
 					ReversePacketFactory.ctx = this;
 					
-					PacketFactory packet = new PacketFactory();
-					
 					while (SendDataThread.inetAddress == null)
 						try {
 							Thread.sleep(100);
