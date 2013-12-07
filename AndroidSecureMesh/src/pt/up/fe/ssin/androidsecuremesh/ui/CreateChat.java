@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
 import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
 import pt.up.fe.ssin.androidsecuremesh.utils.SendDataThread;
+import pt.up.fe.ssin.androidsecuremesh.utils.User;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -44,7 +45,9 @@ public class CreateChat extends Activity {
 			public void onClick(View v) {
 				Chat chat = new Chat(chatRoomName.getText().toString());
 				//chat.setKey(chatRoomKey.getText().toString());
-				
+				for(User user: Login.main.getUserList())
+					if(user.getName().equals(MainMenu.userName))
+						chat.setOwner(user);
 				
 				while (SendDataThread.inetAddress == null)
 					try {

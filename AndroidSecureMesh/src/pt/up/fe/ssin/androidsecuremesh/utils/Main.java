@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import pt.up.fe.ssin.androidsecuremesh.ui.EnterChatRoom;
+
 public class Main {
 
 	private List<Chat> chatList;
@@ -33,14 +35,7 @@ public class Main {
 
 		if(!containsInChatList(chat))
 		{
-			this.chatList.add(chat);
-
-			String textToSend = "NewChat," + chat.getName() + "," + chat.getKey();
-			
-			String[] textArray = new String[1];
-			textArray[0] = textToSend;
-			
-			
+			this.chatList.add(chat);	
 		}
 		else
 		{
@@ -84,6 +79,17 @@ public class Main {
 				return true;
 		return false;
 	}
+	
+	public void deleteInChatList(Chat chat, String userN)
+	{
+		for(Chat ch: chatList)
+			if(ch.getName().equals(ch.getName()))
+				for(User user: ch.getUsersList())
+					if(user.getName().equals(userN))
+						ch.removeFromUsersList(user);
+	}
+	
+	
 
 	public void deleteInUserList(String username) {
 		for(int i=0; i<userList.size(); i++)

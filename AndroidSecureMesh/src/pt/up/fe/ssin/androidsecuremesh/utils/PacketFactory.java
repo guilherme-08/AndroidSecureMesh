@@ -91,17 +91,17 @@ public class PacketFactory {
 		ByteBuffer byteBufferIP = ByteBuffer.wrap(IPByte);
 		byteBufferIP.put(IP.getBytes());
 		
-		byte[] chatKeyByte = new byte[ChatKeySize];
+	/*	byte[] chatKeyByte = new byte[ChatKeySize];
 		ByteBuffer.wrap(chatKeyByte).put(chatKey.getEncoded());
 		
-		CryptoUtils.encrypt(ownerKey, chatKeyByte);
+		CryptoUtils.encrypt(ownerKey, chatKeyByte);*/
 		
 
 		byteBuffer.putInt(1);
 		byteBuffer.put(nameByte);
 		byteBuffer.put(textByte);
 		byteBuffer.put(IPByte);
-		byteBuffer.put(chatKeyByte);
+		//byteBuffer.put(chatKeyByte);
 		
 		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
 
@@ -121,7 +121,7 @@ public class PacketFactory {
 		byteBufferChatName.put(chatName.getBytes());
 		
 
-		byte[] userNameByte = new byte[NameSize];
+		byte[] userNameByte = new byte[UserNameSize];
 		ByteBuffer byteBufferName = ByteBuffer.wrap(userNameByte);
 		byteBufferName.put(userName.getBytes());
 
@@ -141,5 +141,36 @@ public class PacketFactory {
 		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
 
 		return datagramPacket;
+	}
+
+
+
+	public static DatagramPacket newChatUser(String userName, Chat chosenChat,
+			InetAddress host, int port) {
+		
+		
+		byte[] packet = new byte[IntSize + ChatNameSize + UserNameSize];
+		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
+		
+		
+		byte[] chatNameByte = new byte[ChatNameSize];
+		ByteBuffer byteBufferChatName = ByteBuffer.wrap(chatNameByte);
+		byteBufferChatName.put(chosenChat.getName().getBytes());
+		
+
+		byte[] userNameByte = new byte[UserNameSize];
+		ByteBuffer byteBufferName = ByteBuffer.wrap(userNameByte);
+		byteBufferName.put(userName.getBytes());
+		
+		
+		byteBuffer.putInt(4);
+		byteBuffer.put(chatNameByte);
+		byteBuffer.put(userNameByte);
+
+
+		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
+
+		return datagramPacket;
+		
 	}
 }

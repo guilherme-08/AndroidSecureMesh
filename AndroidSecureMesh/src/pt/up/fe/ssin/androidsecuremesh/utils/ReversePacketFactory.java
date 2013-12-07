@@ -14,6 +14,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 
 import pt.up.fe.ssin.androidsecuremesh.ui.ChatConversation;
+import pt.up.fe.ssin.androidsecuremesh.ui.ChatUsersList;
 import pt.up.fe.ssin.androidsecuremesh.ui.EnterChatRoom;
 import pt.up.fe.ssin.androidsecuremesh.ui.Login;
 
@@ -58,10 +59,10 @@ public class ReversePacketFactory {
 		String IP;
 		String chatName;
 		String Text;
-		
+
 		switch(iD)
 		{
-		case 1:
+		case 1: 
 			byte[] NameByte = new byte[NameSize];
 			//TODO miss Keys
 			IPByte = new byte[IPSize];
@@ -81,63 +82,121 @@ public class ReversePacketFactory {
 			Text = new String(TextByte);
 			IP = new String(IPByte);
 			break;
-			
-		case 2:
-			ChatNameByte = new byte[ChatNameSize];
-			
-			IPByte = new byte[IPSize];
 
-			for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
-				ChatNameByte[i - IntSize] = packet[i];
-
-			for(int i=(IntSize + ChatNameSize); i<(IntSize + ChatNameSize + IPSize); i++)
-				IPByte[i -(IntSize + ChatNameSize)] = packet[i];
-
-
-
-			chatName = new String(ChatNameByte);
-			IP = new String(IPByte);
-			Login.main.addToChatList(new Chat(chatName));
-//			Toast toast = Toast.makeText(ctx, "ID: " + chatName + "Name: " + Ip, Toast.LENGTH_LONG);
-			//toast.show()
+		case 2: 
+			newChatRequest(packet);
 			break;
-		case 3:
-			ChatNameByte = new byte[ChatNameSize];
-			
-			byte[] UserNameByte = new byte[UserNameSize];
-			
-			//TODO keys missing
-			
-			TextByte = new byte[TextSize];
-			
-			for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
-				ChatNameByte[i - IntSize] = packet[i];
-			
-			for(int i=(IntSize + ChatNameSize); i<(IntSize + ChatNameSize + UserNameSize); i++)
-				UserNameByte[i -(IntSize + ChatNameSize)] = packet[i];
-			
-			
-			for(int i=(IntSize + ChatNameSize + UserNameSize); i<(IntSize + ChatNameSize + UserNameSize + TextSize); i++)
-				TextByte[i -(IntSize + ChatNameSize + UserNameSize)] = packet[i];
-			
-			
-			chatName = new String(ChatNameByte);
-			String userName = new String(UserNameByte);
-			Text = new String(TextByte);
-			
-			if(chatName.equals(EnterChatRoom.chosenChat.getName()))
-			{
-				ChatConversation.messagesList.add(Text);
-			}
-			
-			
+
+		case 3: 
+			sendTextToChat(packet);
 			break;
+		case 4:
+			newChatUser(packet);
+			break;
+
+
 		}
 
+	}
 
 
-		/*Toast toast = Toast.makeText(ctx, "ID: " + ID + "Name: " + Name + "IP: " + IP, Toast.LENGTH_LONG);
-		toast.show();*/
+	private static void newChatUser(byte[] packet) {
+		byte[] ChatNameByte = new byte[ChatNameSize];
+
+		byte[] UserNameByte = new byte[UserNameSize];
+
+		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
+			ChatNameByte[i - IntSize] = packet[i];
+
+		for(int i=(IntSize + ChatNameSize); i<(IntSize + ChatNameSize + UserNameSize); i++)
+			UserNameByte[i -(IntSize + ChatNameSize)] = packet[i];
+
+
+		String chatName = new String(ChatNameByte);
+		String userName = new String(UserNameByte);
+		
+		Chat theChat = null;
+		for(Chat chat: Login.main.getChatList())
+			if(chat.getName().equals(chatName))
+				theChat = chat;
+		
+		userName = userName.replaceAll("\u0000.*", "");
+		
+		User theUser = null;
+		for(User user: Login.main.getUserList())
+			if(user.getName().equals(userName))
+				theUser = user;
+		
+		theChat.addToUsersList(theUser);
+		
+		if(ChatUsersList.usersListAdapter != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
+		{
+			NewChatUserAsyncTask sendChatTextAsyncTask = new NewChatUserAsyncTask();
+			sendChatTextAsyncTask.execute(userName);
+		}
+		
+	}
+
+
+	private static void sendTextToChat(byte[] packet) {
+		byte[] ChatNameByte = new byte[ChatNameSize];
+
+		byte[] UserNameByte = new byte[UserNameSize];
+
+		//TODO keys missing
+
+		byte[] TextByte = new byte[TextSize];
+
+		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
+			ChatNameByte[i - IntSize] = packet[i];
+
+		for(int i=(IntSize + ChatNameSize); i<(IntSize + ChatNameSize + UserNameSize); i++)
+			UserNameByte[i -(IntSize + ChatNameSize)] = packet[i];
+
+
+		for(int i=(IntSize + ChatNameSize + UserNameSize); i<(IntSize + ChatNameSize + UserNameSize + TextSize); i++)
+			TextByte[i -(IntSize + ChatNameSize + UserNameSize)] = packet[i];
+
+
+		String chatName = new String(ChatNameByte);
+		String userName = new String(UserNameByte);
+		String Text = new String(TextByte);
+
+		if(chatName.equals(EnterChatRoom.chosenChat.getName()))
+		{
+			SendChatTextAsyncTask sendChatTextAsyncTask = new SendChatTextAsyncTask();
+			sendChatTextAsyncTask.execute(Text);
+		}
+
+	}
+
+
+	private static void newChatRequest(byte[] packet) {
+
+		byte[] ChatNameByte = new byte[ChatNameSize];
+
+		byte[] IPByte = new byte[IPSize];
+
+		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
+			ChatNameByte[i - IntSize] = packet[i];
+
+		for(int i=(IntSize + ChatNameSize); i<(IntSize + ChatNameSize + IPSize); i++)
+			IPByte[i -(IntSize + ChatNameSize)] = packet[i];
+
+
+
+		String chatName = new String(ChatNameByte);
+		String IP = new String(IPByte);
+		Chat newChat = new Chat(chatName);
+		Login.main.addToChatList(newChat);
+
+		if(EnterChatRoom.chatList != null)
+		{
+			NewChatAsyncTask newChatAsyncTask = new NewChatAsyncTask();
+			newChatAsyncTask.execute(newChat);
+		}
+		//		Toast toast = Toast.makeText(ctx, "ID: " + chatName + "Name: " + Ip, Toast.LENGTH_LONG);
+		//toast.show()
 
 	}
 

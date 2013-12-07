@@ -24,7 +24,7 @@ public class ChatConversation extends Fragment {
 
 	private ListView messagesListView;
 	public static List<String> messagesList; //to add messages to the chat
-	private ArrayAdapter<String> messagesListAdapter;
+	public static ArrayAdapter<String> messagesListAdapter;
 	private EditText currentMessage;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

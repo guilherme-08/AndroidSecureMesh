@@ -19,8 +19,8 @@ import android.widget.ListView;
 public class ChatUsersList extends Fragment {
 	
 	private ListView usersListView;
-	private List<User> usersList; //to add chats
-	private ArrayAdapter<User> usersListAdapter;
+	public static List<User> usersList; //to add chats
+	public static ArrayAdapter<User> usersListAdapter;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{

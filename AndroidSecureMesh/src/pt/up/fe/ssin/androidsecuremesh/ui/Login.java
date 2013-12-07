@@ -32,7 +32,7 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 
 
-		if(!isNetworkAvailable())
+		if(!isWifiAvailable())
 		{
 			Toast toast = Toast.makeText(getApplicationContext(), "You must be connected to a Wi-fi network!", Toast.LENGTH_LONG);
 			toast.show();
@@ -89,10 +89,10 @@ public class Login extends Activity {
 		}
 	}
 
-	private boolean isNetworkAvailable() {
-		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	private boolean isWifiAvailable() {
+		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		return mWifi.isConnected();
 	}
 
 

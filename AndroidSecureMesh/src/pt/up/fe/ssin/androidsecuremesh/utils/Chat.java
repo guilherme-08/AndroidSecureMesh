@@ -8,6 +8,7 @@ public class Chat {
 	private String name;
 	private String key;
 	private static List<User> usersList = new ArrayList<User>();
+	private User owner;
 	
 	public Chat(String name)
 	{
@@ -43,6 +44,19 @@ public class Chat {
 	public void addToUsersList(User user) {
 		if(!this.usersList.contains(user))
 			this.usersList.add(user);
+	}
+	
+	public void removeFromUsersList(User user)
+	{
+		this.usersList.remove(user);
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 	
 }
