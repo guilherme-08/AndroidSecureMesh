@@ -103,4 +103,11 @@ public class Main {
 				return user;
 		return null;
 	}
+
+	public void deleteChatItem(Chat theChat) {
+		//theChat.setName(theChat.getName().replaceAll("\u0000.*", ""));
+		for(Chat chat: chatList)
+			if(chat.getName().equals(theChat.getName()))
+				chatList.remove(chat);
+	}
 }

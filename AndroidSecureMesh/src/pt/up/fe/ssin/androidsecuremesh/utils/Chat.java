@@ -7,7 +7,7 @@ public class Chat {
 
 	private String name;
 	private String key;
-	private static List<User> usersList = new ArrayList<User>();
+	private List<User> usersList = new ArrayList<User>();
 	private User owner;
 	
 	public Chat(String name)
@@ -37,7 +37,7 @@ public class Chat {
 		
 	}
 
-	public static List<User> getUsersList() {
+	public List<User> getUsersList() {
 		return usersList;
 	}
 

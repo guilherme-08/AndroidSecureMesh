@@ -34,8 +34,8 @@ public class ChatUsersList extends Fragment {
 		
 		usersListView.setAdapter(usersListAdapter);
 		
-		for(User user: EnterChatRoom.chosenChat.getUsersList())
-			usersList.add(user);
+	/*	for(User user: EnterChatRoom.chosenChat.getUsersList())
+			usersList.add(user);*/
 		
 		//Testing examples
 	/*	User u1 = new User("guilha"); User u2 = new User("joao");

@@ -9,7 +9,7 @@ public class NewChatUserAsyncTask extends AsyncTask<String, Void, Void>{
 	@Override
 	protected Void doInBackground(String... params) {
 		
-		for(User user: Login.main.getUserList()) //TODO must ensure that you know all the users and their names are uniques
+		for(User user: Login.main.getUserList()) //TODO must ensure that you know all the users, and their names are uniques
 			if(user.getName().equals(params[0]))
 				ChatUsersList.usersList.add(user);
 		

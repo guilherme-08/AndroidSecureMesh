@@ -173,4 +173,26 @@ public class PacketFactory {
 		return datagramPacket;
 		
 	}
+
+
+
+	public static DatagramPacket deleteChatPackt(Chat chosenChat,
+			InetAddress host, int port) {
+		
+		byte[] packet = new byte[IntSize + ChatNameSize];
+		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
+
+		byte[] chatNameByte = new byte[ChatNameSize];
+		ByteBuffer byteBufferChatName = ByteBuffer.wrap(chatNameByte);
+		byteBufferChatName.put(chosenChat.getName().getBytes());
+
+
+		byteBuffer.putInt(5);
+		byteBuffer.put(chatNameByte);
+
+
+		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
+
+		return datagramPacket;
+	}
 }

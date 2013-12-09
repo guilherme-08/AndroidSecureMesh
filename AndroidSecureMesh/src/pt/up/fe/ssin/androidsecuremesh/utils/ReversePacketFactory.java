@@ -93,10 +93,35 @@ public class ReversePacketFactory {
 		case 4:
 			newChatUser(packet);
 			break;
-
-
+		case 5:
+			deleteChatRequest(packet);
+			break;
 		}
 
+	}
+
+
+	private static void deleteChatRequest(byte[] packet) {
+		
+		byte[] ChatNameByte = new byte[ChatNameSize];
+
+
+		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
+			ChatNameByte[i - IntSize] = packet[i];
+
+
+		String chatName = new String(ChatNameByte);
+		Chat theChat = new Chat(chatName);
+		Login.main.deleteChatItem(theChat);
+
+		if(EnterChatRoom.chatList != null)
+		{
+			DeleteChatAsyncTask deleteChatAsyncTask = new DeleteChatAsyncTask();
+			deleteChatAsyncTask.execute(theChat);
+		}
+		//		Toast toast = Toast.makeText(ctx, "ID: " + chatName + "Name: " + Ip, Toast.LENGTH_LONG);
+		//toast.show()
+		
 	}
 
 
@@ -120,6 +145,12 @@ public class ReversePacketFactory {
 			if(chat.getName().equals(chatName))
 				theChat = chat;
 		
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		userName = userName.replaceAll("\u0000.*", "");
 		
 		User theUser = null;
@@ -129,7 +160,7 @@ public class ReversePacketFactory {
 		
 		theChat.addToUsersList(theUser);
 		
-		if(ChatUsersList.usersListAdapter != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
+		if(ChatUsersList.usersList != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
 		{
 			NewChatUserAsyncTask sendChatTextAsyncTask = new NewChatUserAsyncTask();
 			sendChatTextAsyncTask.execute(userName);
