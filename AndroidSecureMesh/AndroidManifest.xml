@@ -30,11 +30,7 @@
         </activity>
         <activity
             android:name="pt.up.fe.ssin.androidsecuremesh.ui.MainMenu"
-            android:label="@string/title_activity_main_menu"
-            android:parentActivityName="pt.up.fe.ssin.androidsecuremesh.ui.Login" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="pt.up.fe.ssin.androidsecuremesh.Login" />
+            android:label="@string/title_activity_main_menu" >
         </activity>
         <activity
             android:name="pt.up.fe.ssin.androidsecuremesh.ui.CreateChat"
@@ -54,11 +50,7 @@
         </activity>
         <activity
             android:name="pt.up.fe.ssin.androidsecuremesh.ui.ChatRoom"
-            android:label="@string/title_activity_chat_room"
-            android:parentActivityName="pt.up.fe.ssin.androidsecuremesh.ui.EnterChatRoom" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="pt.up.fe.ssin.androidsecuremesh.ui.MainMenu" />
+            android:label="@string/title_activity_chat_room" >
         </activity>
         <activity android:name="pt.up.fe.ssin.androidsecuremesh.ui.TestCryptoActivity" >
 
