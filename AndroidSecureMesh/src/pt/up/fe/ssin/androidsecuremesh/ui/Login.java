@@ -78,7 +78,19 @@ public class Login extends Activity {
 					}
 					else
 					{
-						main.addToUserList(username.getText().toString());
+						
+						
+						while (SendDataThread.inetAddress == null)
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						DatagramPacket datagram = PacketFactory.newMeshUser(username.getText().toString(), SendDataThread.inetAddress, SendDataThread.port);
+						
+						SendDataThread.datagramsArray.add(datagram);
+						
 						Intent intent = new Intent(Login.this, MainMenu.class);
 						intent.putExtra(userName, username.getText().toString());
 						startActivity(intent);

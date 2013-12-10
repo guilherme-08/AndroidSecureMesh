@@ -23,6 +23,7 @@ public class User {
 	private String name;
 	public PrivateKey privateKey;
 	public PublicKey publicKey;
+	public int rating=100;
 	
 	public User(String name) //generate privateKey missing
 	{

@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class ChatRoom extends FragmentActivity {
 
@@ -34,12 +35,24 @@ public class ChatRoom extends FragmentActivity {
 			new AlertDialog.Builder(this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle("Leave Room")
-			.setMessage("Are you sure you really want to leave the mesh?")
+			.setMessage("Are you sure you really want to leave the chat room?")
 			.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Login.main.deleteInChatList(EnterChatRoom.chosenChat, MainMenu.userName);
+					
+					while (SendDataThread.inetAddress == null)
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							Toast toast = Toast.makeText(getApplicationContext(), "Problems with the multicast services", Toast.LENGTH_LONG);
+							toast.show();
+						}
+					DatagramPacket datagramPacket = PacketFactory.deleteUserChatPackt(EnterChatRoom.chosenChat, MainMenu.userName, SendDataThread.inetAddress, SendDataThread.port);
+
+					SendDataThread.datagramsArray.add(datagramPacket);
+					
 
 					if(Login.main.getChatByName(EnterChatRoom.chosenChat.getName()).getUsersList().isEmpty())
 					{
@@ -47,8 +60,8 @@ public class ChatRoom extends FragmentActivity {
 							try {
 								Thread.sleep(100);
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								Toast toast = Toast.makeText(getApplicationContext(), "Problems with the multicast services", Toast.LENGTH_LONG);
+								toast.show();
 							}
 						DatagramPacket datagram = PacketFactory.deleteChatPackt(EnterChatRoom.chosenChat, SendDataThread.inetAddress, SendDataThread.port);
 

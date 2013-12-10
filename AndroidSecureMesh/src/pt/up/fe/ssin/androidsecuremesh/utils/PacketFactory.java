@@ -195,4 +195,53 @@ public class PacketFactory {
 
 		return datagramPacket;
 	}
+
+
+
+	public static DatagramPacket deleteUserChatPackt(Chat chosenChat,
+			String userName, InetAddress host, int port) {
+		
+		byte[] packet = new byte[IntSize + ChatNameSize + UserNameSize];
+		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
+
+		byte[] chatNameByte = new byte[ChatNameSize];
+		ByteBuffer byteBufferChatName = ByteBuffer.wrap(chatNameByte);
+		byteBufferChatName.put(chosenChat.getName().getBytes());
+
+		byte[] userNameByte = new byte[UserNameSize];
+		ByteBuffer byteBufferUserName = ByteBuffer.wrap(userNameByte);
+		byteBufferUserName.put(userName.getBytes());
+		
+		
+		byteBuffer.putInt(6);
+		byteBuffer.put(chatNameByte);
+		byteBuffer.put(userNameByte);
+
+
+		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
+
+		return datagramPacket;
+	}
+
+
+
+	public static DatagramPacket newMeshUser(String userName,
+			InetAddress host, int port) {
+		
+		byte[] packet = new byte[IntSize + UserNameSize];
+		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
+
+		byte[] userNameByte = new byte[UserNameSize];
+		ByteBuffer byteBufferUserName = ByteBuffer.wrap(userNameByte);
+		byteBufferUserName.put(userName.getBytes());
+		
+		
+		byteBuffer.putInt(7);
+		byteBuffer.put(userNameByte);
+
+
+		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
+
+		return datagramPacket;
+	}
 }

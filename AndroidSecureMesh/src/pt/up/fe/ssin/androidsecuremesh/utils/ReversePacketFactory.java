@@ -33,6 +33,8 @@ public class ReversePacketFactory {
 	private static boolean once = false;
 	private static int UserNameSize = PacketFactory.UserNameSize;
 	static final int ChatNameSize = PacketFactory.ChatNameSize;
+	public static boolean existsUser = false;
+	public static boolean answer = false; 
 
 	//String name, String text, AsymmetricKeyParameter userKey, SecretKeySpec chatKey, InetAddress host, int port
 	public static void getPacketText(DatagramPacket datagramPacket)
@@ -96,8 +98,69 @@ public class ReversePacketFactory {
 		case 5:
 			deleteChatRequest(packet);
 			break;
+		case 6:
+			deleteChatUser(packet);
+		case 7:
+			newMeshUser(packet);
 		}
 
+	}
+
+
+	private static void newMeshUser(byte[] packet) {
+
+		byte[] UserNameByte = new byte[UserNameSize];
+		
+
+		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
+			UserNameByte[i - IntSize] = packet[i];
+		
+		
+		String userName = new String(UserNameByte);
+		userName = userName.replaceAll("\u0000.*", "");
+	/*	for(User user: Login.main.getUserList())
+		{
+			if(user.getName().equals(userName))
+			{
+				answer = true;
+				existsUser = true;
+				return;
+			}
+		}*/
+		
+		Login.main.addToUserList(userName);
+		
+	}
+
+
+	private static void deleteChatUser(byte[] packet) {
+		byte[] ChatNameByte = new byte[ChatNameSize];
+		byte[] UserNameByte = new byte[UserNameSize];
+		
+
+		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
+			ChatNameByte[i - IntSize] = packet[i];
+
+		for(int i=(IntSize+ChatNameSize); i<(IntSize+ChatNameSize+UserNameSize); i++)
+			UserNameByte[i-(IntSize+ChatNameSize)] = packet[i];
+		
+
+		String chatName = new String(ChatNameByte);
+		Chat theChat = new Chat(chatName);
+		String userName = new String(UserNameByte);
+		
+		for(Chat chat: Login.main.getChatList())
+			if(chat.getName().equals(theChat.getName()))
+				for(User user: chat.getUsersList())
+					if(user.getName().equals(userName))
+						chat.removeFromUsersList(user);
+		
+		if(ChatUsersList.usersList != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
+		{
+			DeleteChatUserAsyncTask deleteChatUserAsyncTask = new DeleteChatUserAsyncTask();
+			deleteChatUserAsyncTask.execute(userName);
+		}
+		
 	}
 
 
@@ -140,10 +203,7 @@ public class ReversePacketFactory {
 		String chatName = new String(ChatNameByte);
 		String userName = new String(UserNameByte);
 		
-		Chat theChat = null;
-		for(Chat chat: Login.main.getChatList())
-			if(chat.getName().equals(chatName))
-				theChat = chat;
+
 		
 		try {
 			Thread.sleep(100);
@@ -151,14 +211,22 @@ public class ReversePacketFactory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 		userName = userName.replaceAll("\u0000.*", "");
+		for(Chat chat: Login.main.getChatList())
+			if(chat.getName().equals(chatName))
+				for(User user: Login.main.getUserList())
+					if(user.getName().equals(userName))
+						chat.addToUsersList(user);
+	
+	
 		
-		User theUser = null;
-		for(User user: Login.main.getUserList())
-			if(user.getName().equals(userName))
-				theUser = user;
-		
-		theChat.addToUsersList(theUser);
+//		User theUser = null;
+//	
+//				theUser = user;
+//		
+//		theChat.addToUsersList(theUser);
 		
 		if(ChatUsersList.usersList != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
 		{

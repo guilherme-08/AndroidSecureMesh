@@ -13,6 +13,8 @@ public class Main {
 	private List<User> userList;
 	private SendDataThread sendDataThread;
 	private ReceiveDataThread receiveDataThread;
+	private SendTCPThread sendTCPThread;
+	private ReceiveTCPThread receiveTCPThread;
 
 	public Main() throws IOException
 	{
@@ -23,6 +25,17 @@ public class Main {
 		receiveDataThread.start();
 		sendDataThread = new SendDataThread();
 		sendDataThread.start();
+		
+		//TCP Sockets for HandShake and Security
+		sendTCPThread = new SendTCPThread();
+		sendTCPThread.start();
+		receiveTCPThread = new ReceiveTCPThread();
+		receiveTCPThread.start();
+		
+		/*String text = "OLA";
+		String text2 = "ADEUS";
+		SendTCPThread.textList.add(text);
+		SendTCPThread.textList.add(text2);*/
 	}
 
 	public List<Chat> getChatList() {

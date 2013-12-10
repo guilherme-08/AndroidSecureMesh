@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.up.fe.ssin.androidsecuremesh.utils.User;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,13 +14,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 public class ChatUsersList extends Fragment {
 	
-	private ListView usersListView;
+	public ListView usersListView;
 	public static List<User> usersList; //to add chats
 	public static ArrayAdapter<User> usersListAdapter;
 	
@@ -41,11 +46,31 @@ public class ChatUsersList extends Fragment {
 	/*	User u1 = new User("guilha"); User u2 = new User("joao");
 		usersList.add(u1);usersList.add(u2);*/
 		
-		usersListView.setOnTouchListener(new OnTouchListener() {
-			
+		usersListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				// TODO Auto-generated method stub
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int pos, long id) {
+				User user = (User) usersListView.getItemAtPosition(pos);
+				String userName = user.getName();
+				String text = "Username: " + userName + "\nRating: " + Integer.toString(user.rating) + "\nPublic Key: " + new String(user.publicKey.getEncoded());
+			/*	Toast test = Toast.makeText(arg1.getContext(), text, Toast.LENGTH_SHORT);
+				test.show();*/
+				
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						arg1.getContext());
+				
+				alertDialogBuilder
+				.setTitle("User Information")
+				.setMessage(text)
+				.setNegativeButton("Ok", null)
+				.show();
+				
+				AlertDialog alertDialog = alertDialogBuilder.create();
+
+				// show it
+				alertDialog.show();
+				
 				return false;
 			}
 		});
