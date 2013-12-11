@@ -98,7 +98,7 @@ public class PacketFactory {
 		byteBufferIP.put(IP.getBytes());
 		
 		byte[] encryptedTextByte = null;
-		/*
+		
 		byte[] keyBytes = new byte[32];
 		
 		//r.nextBytes(keyBytes);
@@ -127,8 +127,7 @@ public class PacketFactory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
-		encryptedTextByte = textByte;
+		
 		byteBuffer.putInt(1);
 		byteBuffer.put(nameByte);
 		byteBuffer.put(encryptedTextByte);

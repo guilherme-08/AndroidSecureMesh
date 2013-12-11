@@ -26,7 +26,6 @@ public class SendDataThread extends Thread/*AsyncTask<String, Boolean, Boolean>*
 
 		message = "teste";
 
-		Boolean success = true;
 
 		host = "224.0.2.0";
 		port = 8080;
@@ -47,14 +46,12 @@ public class SendDataThread extends Thread/*AsyncTask<String, Boolean, Boolean>*
 		try {
 			multicastSocket.setTimeToLive(1);
 		} catch (IOException e2) {
-			success = false;
 		}
 
 
 		try {
 			multicastSocket.joinGroup(inetAddress);
 		} catch (IOException e1) {
-			success = false;
 		}
 
 
@@ -62,13 +59,19 @@ public class SendDataThread extends Thread/*AsyncTask<String, Boolean, Boolean>*
 
 		while(true)
 		{
-			while(datagramsArray.size() != 0)
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if(datagramsArray.size() != 0)
 			{
 				try {
 					multicastSocket.send(datagramsArray.get(0));
 					datagramsArray.remove(0);
 				} catch (IOException e) {
-					success = false;
+					e.printStackTrace();
 				}
 			}
 		}

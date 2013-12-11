@@ -10,12 +10,14 @@ import pt.up.fe.ssin.androidsecuremesh.utils.Storage;
 import pt.up.fe.ssin.androidsecuremesh.utils.User;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -32,6 +34,9 @@ public class CreateChat extends Activity {
 		setContentView(R.layout.create_chat);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		//get me a keyboard
+		((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
 		
 		
 		Intent intent = getIntent();
@@ -55,17 +60,7 @@ public class CreateChat extends Activity {
 				if (!found)
 					Storage.myData.ownedChats.add(chat);
 				
-				while (SendDataThread.inetAddress == null)
-				{
-					try 
-					{
-						Thread.sleep(100);
-					} 
-					catch (InterruptedException e) 
-					{
-						e.printStackTrace();
-					}
-				}
+				
 				DatagramPacket datagram = PacketFactory.newChatPacket(chatRoomName.getText().toString(), SendDataThread.inetAddress, SendDataThread.port);
 				
 				SendDataThread.datagramsArray.add(datagram);
