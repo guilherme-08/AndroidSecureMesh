@@ -15,6 +15,7 @@ public class Main {
 	private ReceiveDataThread receiveDataThread;
 	private SendTCPThread sendTCPThread;
 	private ReceiveTCPThread receiveTCPThread;
+	private SendUserInfoThread sendUserInfoThread;
 
 	public Main() throws IOException
 	{
@@ -25,6 +26,9 @@ public class Main {
 		receiveDataThread.start();
 		sendDataThread = new SendDataThread();
 		sendDataThread.start();
+		
+		sendUserInfoThread = new SendUserInfoThread();
+		sendUserInfoThread.start();
 		
 		//TCP Sockets for HandShake and Security
 		sendTCPThread = new SendTCPThread();

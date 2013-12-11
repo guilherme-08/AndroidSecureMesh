@@ -40,7 +40,7 @@ public class ChatRoom extends FragmentActivity {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					Login.main.deleteInChatList(EnterChatRoom.chosenChat, MainMenu.userName);
+				//	Login.main.deleteInChatList(EnterChatRoom.chosenChat, MainMenu.userName);
 					
 					while (SendDataThread.inetAddress == null)
 						try {
@@ -68,6 +68,7 @@ public class ChatRoom extends FragmentActivity {
 						SendDataThread.datagramsArray.add(datagram);
 					}
 					
+					EnterChatRoom.chosenChat = null;
 					ChatRoom.this.finish();
 				}
 

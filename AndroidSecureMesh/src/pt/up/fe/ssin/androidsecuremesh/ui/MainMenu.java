@@ -1,5 +1,7 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
+import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
+import pt.up.fe.ssin.androidsecuremesh.utils.User;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -77,7 +79,11 @@ public class MainMenu extends Activity {
 			
 			    @Override
 			    public void onClick(DialogInterface dialog, int which) {
-			    	Login.main.deleteInUserList(userName);
+			    	userName = null;
+			    	EnterChatRoom.chosenChat = null;
+			    	Login.main.getChatList().clear();
+			    	Login.main.getUserList().clear();
+
 			    	MainMenu.this.finish();
 			    }
 			

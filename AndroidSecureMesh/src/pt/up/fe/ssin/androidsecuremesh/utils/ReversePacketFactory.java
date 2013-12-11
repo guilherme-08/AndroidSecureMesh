@@ -100,8 +100,10 @@ public class ReversePacketFactory {
 			break;
 		case 6:
 			deleteChatUser(packet);
+			break;
 		case 7:
 			newMeshUser(packet);
+			break;
 		}
 
 	}
@@ -128,6 +130,10 @@ public class ReversePacketFactory {
 			}
 		}*/
 		
+		for(User user: Login.main.getUserList())
+			if(user.getName().equals(userName))
+				return;
+		
 		Login.main.addToUserList(userName);
 		
 	}
@@ -149,13 +155,25 @@ public class ReversePacketFactory {
 		Chat theChat = new Chat(chatName);
 		String userName = new String(UserNameByte);
 		
+		userName = userName.replaceAll("\u0000.*", "");
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		for(Chat chat: Login.main.getChatList())
 			if(chat.getName().equals(theChat.getName()))
 				for(User user: chat.getUsersList())
 					if(user.getName().equals(userName))
+					{
 						chat.removeFromUsersList(user);
+						return;
+					}
 		
-		if(ChatUsersList.usersList != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
+		if(ChatUsersList.usersList != null && EnterChatRoom.chosenChat != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
 		{
 			DeleteChatUserAsyncTask deleteChatUserAsyncTask = new DeleteChatUserAsyncTask();
 			deleteChatUserAsyncTask.execute(userName);
@@ -176,6 +194,13 @@ public class ReversePacketFactory {
 		String chatName = new String(ChatNameByte);
 		Chat theChat = new Chat(chatName);
 		Login.main.deleteChatItem(theChat);
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		if(EnterChatRoom.chatList != null)
 		{
@@ -206,7 +231,7 @@ public class ReversePacketFactory {
 
 		
 		try {
-			Thread.sleep(100);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -287,6 +312,11 @@ public class ReversePacketFactory {
 		String chatName = new String(ChatNameByte);
 		String IP = new String(IPByte);
 		Chat newChat = new Chat(chatName);
+		
+		for(Chat chat: Login.main.getChatList())
+			if(chat.getName().equals(chatName))
+				return;
+		
 		Login.main.addToChatList(newChat);
 
 		if(EnterChatRoom.chatList != null)

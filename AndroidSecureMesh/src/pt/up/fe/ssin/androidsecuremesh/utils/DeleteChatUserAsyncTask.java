@@ -8,9 +8,9 @@ public class DeleteChatUserAsyncTask extends AsyncTask<String, Void, Void>{
 
 	@Override
 	protected Void doInBackground(String... params) {
-		for(User user : EnterChatRoom.chosenChat.getUsersList())
+		for(User user : ChatUsersList.usersList)
 			if(user.getName().equals(params[0]))
-				EnterChatRoom.chatList.remove(user);
+				ChatUsersList.usersList.remove(user);
 		return null;
 	}
 	

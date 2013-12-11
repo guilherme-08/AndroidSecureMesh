@@ -42,11 +42,13 @@ public class EnterChatRoom extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 
+
 		chatListView = (ListView) findViewById(R.id.chatList);
 		chatList = new ArrayList<Chat>();
 		chatListAdapter = new ArrayAdapter<Chat>(this, android.R.layout.simple_list_item_1, chatList);
 
 		chatListView.setAdapter(chatListAdapter);
+
 
 		//Testing examples
 		/*	Chat test = new Chat("Room222"), test2 = new Chat("Soccer");
@@ -91,7 +93,7 @@ public class EnterChatRoom extends Activity {
 
 
 						Intent intent = new Intent(EnterChatRoom.this, ChatRoom.class);
-						
+
 						startActivity(intent);
 					}
 				})
