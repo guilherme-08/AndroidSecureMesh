@@ -256,7 +256,7 @@ public class PacketFactory {
 
 
 
-	public static DatagramPacket newMeshUser(String userName,
+	public static DatagramPacket newMeshUser(String userName, int rating,
 			InetAddress host, int port) {
 		
 		byte[] packet = new byte[IntSize + UserNameSize];
@@ -269,6 +269,7 @@ public class PacketFactory {
 		
 		byteBuffer.putInt(7);
 		byteBuffer.put(userNameByte);
+		byteBuffer.putInt(rating);
 
 
 		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);

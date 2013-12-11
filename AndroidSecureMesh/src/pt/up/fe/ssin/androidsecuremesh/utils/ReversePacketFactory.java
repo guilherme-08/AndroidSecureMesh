@@ -120,12 +120,16 @@ public class ReversePacketFactory {
 	private static void newMeshUser(byte[] packet) {
 
 		byte[] UserNameByte = new byte[UserNameSize];
+		byte[] UserRatingByte = new byte[IntSize];
 		
 
-		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
+		for(int i=IntSize; i<(IntSize + UserNameSize); i++)
 			UserNameByte[i - IntSize] = packet[i];
 		
+		for(int i=(IntSize + UserNameSize); i< (IntSize + UserNameSize + IntSize); i++)
+			UserRatingByte[i-(IntSize+UserNameSize)] = packet[i];
 		
+		int rating = ByteBuffer.wrap(UserRatingByte).getInt();
 		String userName = new String(UserNameByte);
 		userName = userName.replaceAll("\u0000.*", "");
 	/*	for(User user: Login.main.getUserList())
@@ -142,7 +146,7 @@ public class ReversePacketFactory {
 			if(user.getName().equals(userName))
 				return;
 		
-		Login.main.addToUserList(userName);
+		Login.main.addToUserList(userName, rating);
 		
 	}
 
