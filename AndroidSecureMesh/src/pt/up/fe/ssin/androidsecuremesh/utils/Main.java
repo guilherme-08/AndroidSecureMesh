@@ -79,8 +79,9 @@ public Main() throws IOException
 		return userList;
 	}
 
-	public void addToUserList(String userName) {
+	public void addToUserList(String userName, int rating) {
 		User user = new User(userName);
+		user.rating = rating;
 		this.userList.add(user);
 	}
 

@@ -87,7 +87,7 @@ public class Login extends Activity {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						DatagramPacket datagram = PacketFactory.newMeshUser(username.getText().toString(), SendDataThread.inetAddress, SendDataThread.port);
+						DatagramPacket datagram = PacketFactory.newMeshUser(username.getText().toString(), 100, SendDataThread.inetAddress, SendDataThread.port);
 						
 						SendDataThread.datagramsArray.add(datagram);
 						

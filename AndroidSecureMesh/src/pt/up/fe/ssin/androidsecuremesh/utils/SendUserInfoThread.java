@@ -2,6 +2,7 @@ package pt.up.fe.ssin.androidsecuremesh.utils;
 
 import java.net.DatagramPacket;
 
+import pt.up.fe.ssin.androidsecuremesh.ui.Login;
 import pt.up.fe.ssin.androidsecuremesh.ui.MainMenu;
 
 public class SendUserInfoThread extends Thread{
@@ -23,7 +24,12 @@ public class SendUserInfoThread extends Thread{
 
 			if(MainMenu.userName != null)
 			{
-				DatagramPacket datagram = PacketFactory.newMeshUser(MainMenu.userName, SendDataThread.inetAddress, SendDataThread.port);
+				int rating = 0;
+				for(User user: Login.main.getUserList())
+					if(user.getName().equals(MainMenu.userName))
+						rating = user.rating;
+				
+				DatagramPacket datagram = PacketFactory.newMeshUser(MainMenu.userName, rating, SendDataThread.inetAddress, SendDataThread.port);
 				SendDataThread.datagramsArray.add(datagram);
 			}			
 
