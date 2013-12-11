@@ -8,8 +8,16 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.spongycastle.util.Arrays;
 
 
 
@@ -24,14 +32,14 @@ import android.widget.Toast;
 
 public class ReversePacketFactory {
 
-	private static final int chatKeySize = PacketFactory.ChatKeySize;
-	private static final int NameSize = PacketFactory.NameSize;
-	private static final int IPSize = PacketFactory.IPSize;
-	private static final int TextSize = PacketFactory.TextSize;
+	static final int chatKeySize = PacketFactory.ChatKeySize;
+	static final int NameSize = PacketFactory.NameSize;
+	 static final int IPSize = PacketFactory.IPSize;
+	static final int TextSize = PacketFactory.TextSize;
 	public static Context ctx = null;
-	private static final int IntSize = PacketFactory.IntSize;
+	static final int IntSize = PacketFactory.IntSize;
 	private static boolean once = false;
-	private static int UserNameSize = PacketFactory.UserNameSize;
+	static int UserNameSize = PacketFactory.UserNameSize;
 	static final int ChatNameSize = PacketFactory.ChatNameSize;
 	public static boolean existsUser = false;
 	public static boolean answer = false; 
@@ -185,14 +193,15 @@ public class ReversePacketFactory {
 	private static void deleteChatRequest(byte[] packet) {
 		
 		byte[] ChatNameByte = new byte[ChatNameSize];
-
-
+		
 		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
 			ChatNameByte[i - IntSize] = packet[i];
 
-
 		String chatName = new String(ChatNameByte);
+		CryptoUtils.sanitize(chatName);
+		CryptoUtils.sanitize(chatName);
 		Chat theChat = new Chat(chatName);
+		
 		Login.main.deleteChatItem(theChat);
 		
 		try {
@@ -203,12 +212,7 @@ public class ReversePacketFactory {
 		}
 
 		if(EnterChatRoom.chatList != null)
-		{
-			DeleteChatAsyncTask deleteChatAsyncTask = new DeleteChatAsyncTask();
-			deleteChatAsyncTask.execute(theChat);
-		}
-		//		Toast toast = Toast.makeText(ctx, "ID: " + chatName + "Name: " + Ip, Toast.LENGTH_LONG);
-		//toast.show()
+			new DeleteChatAsyncTask().execute(theChat);
 		
 	}
 
@@ -227,6 +231,9 @@ public class ReversePacketFactory {
 
 		String chatName = new String(ChatNameByte);
 		String userName = new String(UserNameByte);
+		CryptoUtils.sanitize(chatName);
+		CryptoUtils.sanitize(userName);
+		
 		
 
 		
@@ -263,35 +270,7 @@ public class ReversePacketFactory {
 
 
 	private static void sendTextToChat(byte[] packet) {
-		byte[] ChatNameByte = new byte[ChatNameSize];
-
-		byte[] UserNameByte = new byte[UserNameSize];
-
-		//TODO keys missing
-
-		byte[] TextByte = new byte[TextSize];
-
-		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
-			ChatNameByte[i - IntSize] = packet[i];
-
-		for(int i=(IntSize + ChatNameSize); i<(IntSize + ChatNameSize + UserNameSize); i++)
-			UserNameByte[i -(IntSize + ChatNameSize)] = packet[i];
-
-
-		for(int i=(IntSize + ChatNameSize + UserNameSize); i<(IntSize + ChatNameSize + UserNameSize + TextSize); i++)
-			TextByte[i -(IntSize + ChatNameSize + UserNameSize)] = packet[i];
-
-
-		String chatName = new String(ChatNameByte);
-		String userName = new String(UserNameByte);
-		String Text = new String(TextByte);
-
-		if(chatName.equals(EnterChatRoom.chosenChat.getName()))
-		{
-			SendChatTextAsyncTask sendChatTextAsyncTask = new SendChatTextAsyncTask();
-			sendChatTextAsyncTask.execute(Text);
-		}
-
+		new ProcessTextChatPacket().execute(packet);
 	}
 
 
@@ -310,6 +289,8 @@ public class ReversePacketFactory {
 
 
 		String chatName = new String(ChatNameByte);
+		CryptoUtils.sanitize(chatName);
+		
 		String IP = new String(IPByte);
 		Chat newChat = new Chat(chatName);
 		

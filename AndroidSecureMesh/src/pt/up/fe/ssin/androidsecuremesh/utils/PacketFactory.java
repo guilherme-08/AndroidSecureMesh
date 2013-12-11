@@ -9,10 +9,16 @@ import java.io.OutputStreamWriter;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Arrays;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.spongycastle.crypto.CipherParameters;
@@ -91,15 +97,46 @@ public class PacketFactory {
 		ByteBuffer byteBufferIP = ByteBuffer.wrap(IPByte);
 		byteBufferIP.put(IP.getBytes());
 		
+		byte[] encryptedTextByte = null;
+		
 	/*	byte[] chatKeyByte = new byte[ChatKeySize];
 		ByteBuffer.wrap(chatKeyByte).put(chatKey.getEncoded());
 		
 		CryptoUtils.encrypt(ownerKey, chatKeyByte);*/
 		
+		byte[] keyBytes = new byte[32];
+		
+		//r.nextBytes(keyBytes);
+		//same key for everyone!
+		Arrays.fill(keyBytes, (byte) 32);
+		
+		SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
+		
+		try {
+			Cipher ciph = Cipher.getInstance("AES");
+			ciph.init(Cipher.ENCRYPT_MODE, key);
+			encryptedTextByte = ciph.doFinal(textByte);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 		byteBuffer.putInt(1);
 		byteBuffer.put(nameByte);
-		byteBuffer.put(textByte);
+		byteBuffer.put(encryptedTextByte);
 		byteBuffer.put(IPByte);
 		//byteBuffer.put(chatKeyByte);
 		

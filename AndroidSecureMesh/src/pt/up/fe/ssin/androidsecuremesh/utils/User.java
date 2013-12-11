@@ -1,6 +1,5 @@
 package pt.up.fe.ssin.androidsecuremesh.utils;
 
-import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -10,12 +9,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.RSAKeyGenParameterSpec;
-
-import org.spongycastle.crypto.AsymmetricCipherKeyPair;
-import org.spongycastle.crypto.CipherParameters;
-import org.spongycastle.crypto.generators.RSAKeyPairGenerator;
-import org.spongycastle.crypto.params.AsymmetricKeyParameter;
-import org.spongycastle.crypto.params.RSAKeyGenerationParameters;
+import java.util.ArrayList;
 
 
 public class User {
@@ -23,9 +17,11 @@ public class User {
 	private String name;
 	public PrivateKey privateKey;
 	public PublicKey publicKey;
+
 	public int rating=100;
+	public ArrayList<Chat> ownedChats = new ArrayList<Chat>();
 	
-	public User(String name) //generate privateKey missing
+	public User(String name)
 	{
 		this.name = name;
 		
@@ -38,13 +34,10 @@ public class User {
 	
 			generator.initialize(spec, random);
 		} catch (InvalidAlgorithmParameterException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (NoSuchProviderException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}  
 		KeyPair a = generator.generateKeyPair();
@@ -66,8 +59,12 @@ public class User {
 		return this.name;
 	}
 
-	public boolean ownsChat(String string) {
-		// TODO Auto-generated method stub
+	public boolean ownsChat(String string) 
+	{
+		for (Chat c : ownedChats)
+			if (c.getName() == string)
+				return true;
+		
 		return false;
 	}
 	

@@ -16,12 +16,13 @@ public class Main {
 	private SendTCPThread sendTCPThread;
 	private ReceiveTCPThread receiveTCPThread;
 	private SendUserInfoThread sendUserInfoThread;
+	private MulticastThread multicastThread;
 
-	public Main() throws IOException
+public Main() throws IOException
 	{
 		chatList = new ArrayList<Chat>();
 		userList = new ArrayList<User>();
-		sendDataThread = new SendDataThread();
+
 		receiveDataThread = new ReceiveDataThread();
 		receiveDataThread.start();
 		sendDataThread = new SendDataThread();
@@ -40,6 +41,8 @@ public class Main {
 		String text2 = "ADEUS";
 		SendTCPThread.textList.add(text);
 		SendTCPThread.textList.add(text2);*/
+		multicastThread = new MulticastThread();
+		multicastThread.start();
 	}
 
 	public List<Chat> getChatList() {

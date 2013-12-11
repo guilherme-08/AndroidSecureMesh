@@ -54,5 +54,11 @@ public class CryptoUtils {
 	}
 	
 	
+	public static void sanitize(String dirty)
+	{
+		dirty = dirty.substring(0, dirty.indexOf((char) 0));
+		
+	}
+	
 	
 }

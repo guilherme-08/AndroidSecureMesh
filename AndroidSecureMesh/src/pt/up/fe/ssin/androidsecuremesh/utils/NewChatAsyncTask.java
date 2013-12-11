@@ -8,7 +8,16 @@ public class NewChatAsyncTask extends AsyncTask<Chat, Void, Void>{
 
 	@Override
 	protected Void doInBackground(Chat... params) {
-		EnterChatRoom.chatList.add(params[0]);
+		
+		boolean found = false;
+		for (Chat c : EnterChatRoom.chatList)
+			if (c.name.equals(params[0].name))
+				found = true;
+		
+		
+		
+		if (!found)
+			EnterChatRoom.chatList.add(params[0]);
 		return null;
 	}
 	

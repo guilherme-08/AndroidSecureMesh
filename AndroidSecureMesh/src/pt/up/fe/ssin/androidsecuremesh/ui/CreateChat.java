@@ -1,10 +1,12 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
 import java.net.DatagramPacket;
+import java.util.Collections;
 
 import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
 import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
 import pt.up.fe.ssin.androidsecuremesh.utils.SendDataThread;
+import pt.up.fe.ssin.androidsecuremesh.utils.Storage;
 import pt.up.fe.ssin.androidsecuremesh.utils.User;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -45,20 +47,30 @@ public class CreateChat extends Activity {
 			public void onClick(View v) {
 				Chat chat = new Chat(chatRoomName.getText().toString());
 				//chat.setKey(chatRoomKey.getText().toString());
-				for(User user: Login.main.getUserList())
-					if(user.getName().equals(MainMenu.userName))
-						chat.setOwner(user);
+				boolean found = false;
+				for (Chat c : Storage.myData.ownedChats)
+					if (c.name == c.name)
+						found = true;
+				
+				if (!found)
+					Storage.myData.ownedChats.add(chat);
 				
 				while (SendDataThread.inetAddress == null)
-					try {
+				{
+					try 
+					{
 						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+					} 
+					catch (InterruptedException e) 
+					{
 						e.printStackTrace();
 					}
+				}
 				DatagramPacket datagram = PacketFactory.newChatPacket(chatRoomName.getText().toString(), SendDataThread.inetAddress, SendDataThread.port);
 				
 				SendDataThread.datagramsArray.add(datagram);
+				
+				
 				
 				
 				//Login.main.addToChatList(chat);

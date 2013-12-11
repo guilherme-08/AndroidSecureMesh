@@ -1,18 +1,33 @@
 package pt.up.fe.ssin.androidsecuremesh.utils;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Chat {
+import javax.crypto.spec.SecretKeySpec;
 
-	private String name;
-	private String key;
+import org.spongycastle.util.Arrays;
+
+public class Chat {
+	private SecureRandom r = new SecureRandom();
+	public String name;
+	private SecretKeySpec key;
 	private List<User> usersList = new ArrayList<User>();
 	private User owner;
 	
-	public Chat(String name)
+	public Chat(String _name)
 	{
-		this.setName(name);
+		if (_name.indexOf(0) != -1)
+			name = _name.substring(0, _name.indexOf(0));
+		else
+			name = _name;
+		byte[] keyBytes = new byte[64];
+		
+		//r.nextBytes(keyBytes);
+		//same key for everyone!
+		Arrays.fill(keyBytes, (byte) 68);
+		
+		key = new SecretKeySpec(keyBytes, "AES");
 	}
 
 	public String getName() {
@@ -23,11 +38,11 @@ public class Chat {
 		this.name = name;
 	}
 
-	public String getKey() {
+	public SecretKeySpec getKey() {
 		return key;
 	}
 
-	public void setKey(String key) {
+	public void setKey(SecretKeySpec key) {
 		this.key = key;
 	}
 	
