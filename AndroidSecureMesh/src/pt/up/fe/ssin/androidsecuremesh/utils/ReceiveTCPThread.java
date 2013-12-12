@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import android.util.Log;
+
 public class ReceiveTCPThread extends Thread{
 
 	private ServerSocket srvSocket;
@@ -26,6 +28,7 @@ public class ReceiveTCPThread extends Thread{
 
 			while(true)
 			{
+				Log.e("HELLO TCP SEND", "Looping!");
 				input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				text = input.readLine();
 			}

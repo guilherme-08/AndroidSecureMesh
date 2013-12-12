@@ -28,6 +28,7 @@ import pt.up.fe.ssin.androidsecuremesh.ui.Login;
 
 import android.content.Context;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 public class ReversePacketFactory {
@@ -57,7 +58,7 @@ public class ReversePacketFactory {
 		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
 
 		int ID = byteBuffer.getInt(0);
-
+		Log.i("HELLO REC", "Id is:" + ID);
 		getPacketDataByID(packet, ID);		
 	}
 
@@ -235,8 +236,8 @@ public class ReversePacketFactory {
 
 		String chatName = new String(ChatNameByte);
 		String userName = new String(UserNameByte);
-		CryptoUtils.sanitize(chatName);
-		CryptoUtils.sanitize(userName);
+		chatName = CryptoUtils.sanitize(chatName);
+		userName = CryptoUtils.sanitize(userName);
 		
 		
 
@@ -293,7 +294,7 @@ public class ReversePacketFactory {
 
 
 		String chatName = new String(ChatNameByte);
-		CryptoUtils.sanitize(chatName);
+		chatName = CryptoUtils.sanitize(chatName);
 		
 		String IP = new String(IPByte);
 		Chat newChat = new Chat(chatName);

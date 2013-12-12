@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.AsyncTask;
+import android.util.Log;
 //		      								  params, progress, return
 public class SendDataThread extends Thread/*AsyncTask<String, Boolean, Boolean>*/{
 
@@ -33,13 +34,11 @@ public class SendDataThread extends Thread/*AsyncTask<String, Boolean, Boolean>*
 		try {
 			multicastSocket = new MulticastSocket(port);
 		} catch (IOException e1) {
-			success = false;
 		}
 
 		try {
 			inetAddress = InetAddress.getByName(host);
 		} catch (UnknownHostException e3) {
-			success = false;
 		}
 
 
@@ -60,7 +59,7 @@ public class SendDataThread extends Thread/*AsyncTask<String, Boolean, Boolean>*
 		while(true)
 		{
 			try {
-				Thread.sleep(500);
+				Thread.sleep(1000);
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -70,10 +69,30 @@ public class SendDataThread extends Thread/*AsyncTask<String, Boolean, Boolean>*
 				try {
 					multicastSocket.send(datagramsArray.get(0));
 					datagramsArray.remove(0);
-				} catch (IOException e) {
+				} 
+				catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
+			for (Chat c : Storage.myData.ownedChats)
+			{
+				try 
+				{
+					multicastSocket.send(PacketFactory.newChatPacket(c.getName(), InetAddress.getByName(host), port));
+				} 
+				catch (UnknownHostException e) 
+				{
+					// TODO Auto-generated catch block
+						e.printStackTrace();
+				} 
+				catch (IOException e) 
+				{
+						// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			Log.i("HELLO SEND", "Heartbeat!");
+		
 		}
 
 		//	return success;

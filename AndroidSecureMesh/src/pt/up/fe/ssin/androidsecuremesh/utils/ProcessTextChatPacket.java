@@ -32,6 +32,7 @@ public class ProcessTextChatPacket extends AsyncTask<byte[], Void, String>{
 
 
 		String chatName = new String(ChatNameByte);
+		chatName = CryptoUtils.sanitize(chatName);
 		if(!chatName.equals(EnterChatRoom.chosenChat.getName()))
 			return null;
 		
@@ -54,8 +55,8 @@ public class ProcessTextChatPacket extends AsyncTask<byte[], Void, String>{
 			Cipher ciph = Cipher.getInstance("AES");
 			ciph.init(Cipher.DECRYPT_MODE, key);
 			
-			decrypted = ciph.doFinal(TextByte);
-			//decrypted = TextByte;
+			//decrypted = ciph.doFinal(TextByte);
+			decrypted = TextByte;
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,6 +67,7 @@ public class ProcessTextChatPacket extends AsyncTask<byte[], Void, String>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		/*
 		catch (IllegalBlockSizeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -73,6 +75,7 @@ public class ProcessTextChatPacket extends AsyncTask<byte[], Void, String>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		
 		String userName = new String(UserNameByte);
 		String text = new String(decrypted);
