@@ -25,6 +25,7 @@ import pt.up.fe.ssin.androidsecuremesh.ui.ChatConversation;
 import pt.up.fe.ssin.androidsecuremesh.ui.ChatUsersList;
 import pt.up.fe.ssin.androidsecuremesh.ui.EnterChatRoom;
 import pt.up.fe.ssin.androidsecuremesh.ui.Login;
+import pt.up.fe.ssin.androidsecuremesh.ui.MainMenu;
 
 import android.content.Context;
 import android.os.Looper;
@@ -273,6 +274,7 @@ public class ReversePacketFactory {
 		String userName = new String(UserNameByte);
 		
 		userName = userName.replaceAll("\u0000.*", "");
+		chatName = chatName.replaceAll("\u0000.*", "");
 		
 		try {
 			Thread.sleep(1000);
@@ -287,7 +289,6 @@ public class ReversePacketFactory {
 					if(user.getName().equals(userName))
 					{
 						chat.removeFromUsersList(user);
-						return;
 					}
 		
 		if(ChatUsersList.usersList != null && EnterChatRoom.chosenChat != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
@@ -435,7 +436,7 @@ public class ReversePacketFactory {
 		}
 		
 		
-		if(ChatUsersList.usersList != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
+		if(!MainMenu.userName.equals(userName) && ChatUsersList.usersList != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
 		{
 			NewChatUserAsyncTask sendChatTextAsyncTask = new NewChatUserAsyncTask();
 			sendChatTextAsyncTask.execute(userName);
