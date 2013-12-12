@@ -149,6 +149,9 @@ public class ReversePacketFactory {
 		String chatName = new String(ChatNameByte);
 		String userName = new String(UserNameByte);
 		
+		chatName = CryptoUtils.sanitize(chatName);
+		userName = CryptoUtils.sanitize(userName);
+		
 		User user = Login.main.getUserByUsername(userName);
 		Chat chat = Login.main.getChatByName(chatName);
 		
@@ -178,6 +181,8 @@ public class ReversePacketFactory {
 		
 		String chatName = new String(ChatNameByte);
 		String userName = new String(UserNameByte);
+		userName = CryptoUtils.sanitize(userName);
+		chatName = CryptoUtils.sanitize(chatName);
 		
 		User user = Login.main.getUserByUsername(userName);
 		Chat chat = Login.main.getChatByName(chatName);
@@ -389,12 +394,15 @@ public class ReversePacketFactory {
 				}
 				
 		
-		boolean isThereAnyOtherSecondOwner = true;
+		if(ChatUsersList.usersList.isEmpty())
+			canBeSecondOwner = false;
+		
+		boolean isThereAnyOtherSecondOwner = false;
 		
 		for(User user: Login.main.getUserList())
 			for(Chat chat: user.nextOwnedChats)
 				if(chat.name.equals(chatName))
-					isThereAnyOtherSecondOwner = false;
+					isThereAnyOtherSecondOwner = true;
 		
 		
 		if(canBeSecondOwner)
