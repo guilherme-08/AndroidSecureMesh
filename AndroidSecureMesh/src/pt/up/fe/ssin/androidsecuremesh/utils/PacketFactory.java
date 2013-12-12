@@ -276,4 +276,87 @@ public class PacketFactory {
 
 		return datagramPacket;
 	}
+
+
+
+	public static DatagramPacket changeUserRating(String name, int rating,
+			PublicKey publicKey, SecretKeySpec keySpec, InetAddress host,
+			int port) {
+	
+		byte[] packet = new byte[2*IntSize + UserNameSize];
+		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
+
+		byte[] userNameByte = new byte[UserNameSize];
+		ByteBuffer byteBufferUserName = ByteBuffer.wrap(userNameByte);
+		byteBufferUserName.put(name.getBytes());
+		
+		
+		byteBuffer.putInt(8);
+		byteBuffer.put(userNameByte);
+		byteBuffer.putInt(rating);
+
+
+		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
+
+		return datagramPacket;
+		
+	}
+
+
+
+	public static DatagramPacket secondOwner(String chatName, String userName,
+			InetAddress host, int port) {
+		
+		byte[] packet = new byte[IntSize + ChatNameSize + UserNameSize];
+		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
+
+		
+		byte[] chatNameByte = new byte[ChatNameSize];
+		ByteBuffer byteBufferChatName = ByteBuffer.wrap(chatNameByte);
+		byteBufferChatName.put(chatName.getBytes());
+		
+		
+		byte[] userNameByte = new byte[UserNameSize];
+		ByteBuffer byteBufferUserName = ByteBuffer.wrap(userNameByte);
+		byteBufferUserName.put(userName.getBytes());
+		
+		
+		byteBuffer.putInt(9);
+		byteBuffer.put(chatNameByte);
+		byteBuffer.put(userNameByte);
+
+
+		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
+
+		return datagramPacket;
+	}
+
+
+
+	public static DatagramPacket quitSecondOwner(String chatName,
+			String userName, InetAddress host, int port) {
+		
+		byte[] packet = new byte[IntSize + ChatNameSize + UserNameSize];
+		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
+
+		
+		byte[] chatNameByte = new byte[ChatNameSize];
+		ByteBuffer byteBufferChatName = ByteBuffer.wrap(chatNameByte);
+		byteBufferChatName.put(chatName.getBytes());
+		
+		
+		byte[] userNameByte = new byte[UserNameSize];
+		ByteBuffer byteBufferUserName = ByteBuffer.wrap(userNameByte);
+		byteBufferUserName.put(userName.getBytes());
+		
+		
+		byteBuffer.putInt(10);
+		byteBuffer.put(chatNameByte);
+		byteBuffer.put(userNameByte);
+
+
+		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
+
+		return datagramPacket;
+	}
 }

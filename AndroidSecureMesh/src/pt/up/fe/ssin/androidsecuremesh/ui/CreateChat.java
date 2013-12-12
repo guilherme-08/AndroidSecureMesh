@@ -25,7 +25,7 @@ public class CreateChat extends Activity {
 
 	private String userName;
 	private EditText chatRoomName;
-	private EditText chatRoomKey;
+	//private EditText chatRoomKey;
 	private Button createChat;
 
 	@Override
@@ -43,7 +43,7 @@ public class CreateChat extends Activity {
 		userName = intent.getStringExtra(Login.userName);
 		
 		chatRoomName = (EditText) findViewById(R.id.chatName);
-		chatRoomKey = (EditText) findViewById(R.id.chatPassword);
+		//chatRoomKey = (EditText) findViewById(R.id.chatPassword);
 		createChat = (Button) findViewById(R.id.createChat);
 		
 		createChat.setOnClickListener(new View.OnClickListener() {

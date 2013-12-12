@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import pt.up.fe.ssin.androidsecuremesh.ui.EnterChatRoom;
+import pt.up.fe.ssin.androidsecuremesh.ui.Login;
 
 public class Main {
 
@@ -130,5 +131,12 @@ public Main() throws IOException
 		for(Chat chat: chatList)
 			if(chat.getName().equals(theChat.getName()))
 				chatList.remove(chat);
+	}
+
+	public void changeUserRating(String userName, int rating) {
+
+		for(User user: userList)
+			if(user.getName().equals(userName))
+				user.rating = rating;
 	}
 }

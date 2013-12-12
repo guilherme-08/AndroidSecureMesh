@@ -113,8 +113,107 @@ public class ReversePacketFactory {
 		case 7:
 			newMeshUser(packet);
 			break;
+		case 8:
+			changeUserRating(packet);
+			break;
+		case 9:
+			secondOwnerRequest(packet);
+			break;
+		case 10:
+			quitSecondOwner(packet);
+			break;
 		}
 
+	}
+
+
+	private static void quitSecondOwner(byte[] packet) {
+		
+		byte[] ChatNameByte = new byte[ChatNameSize];
+		byte[] UserNameByte = new byte[UserNameSize];
+		
+
+		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
+			ChatNameByte[i - IntSize] = packet[i];
+		
+		for(int i=(IntSize + ChatNameSize); i< (IntSize + UserNameSize + ChatNameSize); i++)
+			UserNameByte[i-(IntSize+ChatNameSize)] = packet[i];
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String chatName = new String(ChatNameByte);
+		String userName = new String(UserNameByte);
+		
+		User user = Login.main.getUserByUsername(userName);
+		Chat chat = Login.main.getChatByName(chatName);
+		
+		user.nextOwnedChats.remove(chat);
+		
+	}
+
+
+	private static void secondOwnerRequest(byte[] packet) {
+		
+		byte[] ChatNameByte = new byte[ChatNameSize];
+		byte[] UserNameByte = new byte[UserNameSize];
+		
+
+		for(int i=IntSize; i<(IntSize + ChatNameSize); i++)
+			ChatNameByte[i - IntSize] = packet[i];
+		
+		for(int i=(IntSize + ChatNameSize); i< (IntSize + UserNameSize + ChatNameSize); i++)
+			UserNameByte[i-(IntSize+ChatNameSize)] = packet[i];
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String chatName = new String(ChatNameByte);
+		String userName = new String(UserNameByte);
+		
+		User user = Login.main.getUserByUsername(userName);
+		Chat chat = Login.main.getChatByName(chatName);
+		
+		user.nextOwnedChats.add(chat);
+		
+	}
+
+
+	private static void changeUserRating(byte[] packet) {
+		
+		byte[] UserNameByte = new byte[UserNameSize];
+		byte[] UserRatingByte = new byte[IntSize];
+		
+
+		for(int i=IntSize; i<(IntSize + UserNameSize); i++)
+			UserNameByte[i - IntSize] = packet[i];
+		
+		for(int i=(IntSize + UserNameSize); i< (IntSize + UserNameSize + IntSize); i++)
+			UserRatingByte[i-(IntSize+UserNameSize)] = packet[i];
+		
+		int rating = ByteBuffer.wrap(UserRatingByte).getInt();
+		String userName = new String(UserNameByte);
+		userName = userName.replaceAll("\u0000.*", "");
+	/*	for(User user: Login.main.getUserList())
+		{
+			if(user.getName().equals(userName))
+			{
+				answer = true;
+				existsUser = true;
+				return;
+			}
+		}*/
+		
+		Login.main.changeUserRating(userName, rating);
+		
 	}
 
 
@@ -264,6 +363,69 @@ public class ReversePacketFactory {
 //				theUser = user;
 //		
 //		theChat.addToUsersList(theUser);
+		
+		
+		
+		boolean canBeSecondOwner = true;
+		
+		
+		for(User user: Login.main.getUserList())
+			for(Chat chat: user.ownedChats)
+				if(chat.name.equals(chatName))
+					canBeSecondOwner = false;
+		
+		
+		for(User user: Login.main.getUserList()) 
+			if(user.getName().equals(userName))
+				for(User user2: ChatUsersList.usersList)
+				{
+					if(!user2.getName().equals(user))
+					{
+						if(user2.rating > user.rating)
+							canBeSecondOwner = false;
+						else if(user2.rating == user.rating && user2.getName().length() > user.getName().length())
+							canBeSecondOwner = false;
+					}
+				}
+				
+		
+		boolean isThereAnyOtherSecondOwner = true;
+		
+		for(User user: Login.main.getUserList())
+			for(Chat chat: user.nextOwnedChats)
+				if(chat.name.equals(chatName))
+					isThereAnyOtherSecondOwner = false;
+		
+		
+		if(canBeSecondOwner)
+		{
+			while (SendDataThread.inetAddress == null)
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			DatagramPacket datagram = PacketFactory.secondOwner(chatName, userName, SendDataThread.inetAddress, SendDataThread.port);
+			
+			SendDataThread.datagramsArray.add(datagram);
+		}
+		
+		
+		if(isThereAnyOtherSecondOwner)
+		{
+			while (SendDataThread.inetAddress == null)
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			DatagramPacket datagram = PacketFactory.quitSecondOwner(chatName, userName, SendDataThread.inetAddress, SendDataThread.port);
+			
+			SendDataThread.datagramsArray.add(datagram);
+		}
+		
 		
 		if(ChatUsersList.usersList != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
 		{

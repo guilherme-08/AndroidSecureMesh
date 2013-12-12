@@ -1,12 +1,17 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
 
+import java.net.DatagramPacket;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
+import pt.up.fe.ssin.androidsecuremesh.utils.SendDataThread;
+import pt.up.fe.ssin.androidsecuremesh.utils.Storage;
 import pt.up.fe.ssin.androidsecuremesh.utils.User;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -51,9 +56,9 @@ public class ChatUsersList extends Fragment {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int pos, long id) {
-				User user = (User) usersListView.getItemAtPosition(pos);
+				final User user = (User) usersListView.getItemAtPosition(pos);
 				String userName = user.getName();
-				String text = "Username: " + userName + "\nRating: " + Integer.toString(user.rating) + "\nPublic Key: " + new String(user.publicKey.getEncoded());
+				String text = "Username: " + userName + "\nRating: " + Integer.toString(user.rating) + "\nPublic Key: " + User.bytesToHex(user.publicKey.getEncoded());
 			/*	Toast test = Toast.makeText(arg1.getContext(), text, Toast.LENGTH_SHORT);
 				test.show();*/
 				
@@ -63,13 +68,45 @@ public class ChatUsersList extends Fragment {
 				alertDialogBuilder
 				.setTitle("User Information")
 				.setMessage(text)
-				.setNegativeButton("Ok", null)
+				.setPositiveButton("Like", new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						++user.rating;					
+						
+						while (SendDataThread.inetAddress == null)
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						DatagramPacket datagram = PacketFactory.changeUserRating(user.getName(), user.rating, Storage.myData.publicKey, null, SendDataThread.inetAddress, SendDataThread.port);
+						
+						SendDataThread.datagramsArray.add(datagram);
+					}
+				})
+				.setNegativeButton("Dislike", new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						--user.rating;
+						
+						while (SendDataThread.inetAddress == null)
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						DatagramPacket datagram = PacketFactory.changeUserRating(user.getName(), user.rating, Storage.myData.publicKey, null, SendDataThread.inetAddress, SendDataThread.port);
+						
+						SendDataThread.datagramsArray.add(datagram);
+					}
+				})
+				.setNeutralButton("Ok", null)
 				.show();
 				
-				AlertDialog alertDialog = alertDialogBuilder.create();
-
-				// show it
-				alertDialog.show();
 				
 				return false;
 			}

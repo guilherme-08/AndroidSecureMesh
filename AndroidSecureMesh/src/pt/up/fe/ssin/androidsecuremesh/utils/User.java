@@ -20,6 +20,7 @@ public class User {
 
 	public int rating=100;
 	public ArrayList<Chat> ownedChats = new ArrayList<Chat>();
+	public ArrayList<Chat> nextOwnedChats = new ArrayList<Chat>();
 	
 	public User(String name)
 	{
@@ -68,4 +69,14 @@ public class User {
 		return false;
 	}
 	
+	public static String bytesToHex(byte[] bytes) {
+		 StringBuilder sb = new StringBuilder();
+		   for(int i=0; i<bytes.length; i++)
+		   {
+		      sb.append(String.format("%02x", bytes[i]&0xff));
+		      if((i+1) != bytes.length)
+		    	  sb.append(':');
+		   }
+		   return sb.toString();
+	}
 }

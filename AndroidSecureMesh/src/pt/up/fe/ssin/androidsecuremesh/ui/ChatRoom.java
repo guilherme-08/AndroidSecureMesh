@@ -6,6 +6,7 @@ import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
 import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
 import pt.up.fe.ssin.androidsecuremesh.utils.SendDataThread;
 import pt.up.fe.ssin.androidsecuremesh.utils.Storage;
+import pt.up.fe.ssin.androidsecuremesh.utils.User;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -25,7 +26,6 @@ public class ChatRoom extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chat_room);
 		// Show the Up button in the action bar.
-
 
 	}
 
