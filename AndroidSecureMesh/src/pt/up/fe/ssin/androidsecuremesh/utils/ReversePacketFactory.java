@@ -326,7 +326,7 @@ public class ReversePacketFactory {
 		switch (parseInt)
 		{
 		case 0xDEADBEEF: //chat key request
-			
+			Log.e("HELLO CRYPTO", "Handshake 2 begin");
 			String[] args = pckt.split("\\|"); 
 			String publicKey = null;
 			String chatName = args[2];
@@ -369,6 +369,7 @@ public class ReversePacketFactory {
 			
 			String newPacket = PacketFactory.createChatAcceptance(cipherText) + "@|@|@|@" + remoteIP;
 			SendTCPThread.textList.add(newPacket);
+			Log.e("HELLO CRYPTO", "Handshake 2 end");
 			break;
 		}
 		
