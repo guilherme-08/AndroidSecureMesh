@@ -294,6 +294,7 @@ public class ReversePacketFactory {
 					if(user.name.equals(userName))
 					{
 						chat.removeFromUsersList(user);
+						break;
 					}
 		
 		if(ChatUsersList.usersList != null && EnterChatRoom.chosenChat != null && chatName.equals(EnterChatRoom.chosenChat.getName()))
