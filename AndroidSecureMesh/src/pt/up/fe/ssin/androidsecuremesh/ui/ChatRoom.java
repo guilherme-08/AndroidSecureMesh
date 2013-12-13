@@ -3,6 +3,7 @@ package pt.up.fe.ssin.androidsecuremesh.ui;
 import java.net.DatagramPacket;
 
 import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
+import pt.up.fe.ssin.androidsecuremesh.utils.Main;
 import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
 import pt.up.fe.ssin.androidsecuremesh.utils.SendDataThread;
 import pt.up.fe.ssin.androidsecuremesh.utils.Storage;
@@ -54,7 +55,7 @@ public class ChatRoom extends FragmentActivity {
 					SendDataThread.datagramsArray.add(datagramPacket);
 					
 
-					if(Login.main.getChatByName(EnterChatRoom.chosenChat.getName()).getUsersList().isEmpty())
+					if(Main.getChatByName(EnterChatRoom.chosenChat.getName()).getUsersList().isEmpty())
 					{
 						while (SendDataThread.inetAddress == null)
 							try {

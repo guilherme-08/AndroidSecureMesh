@@ -26,7 +26,7 @@ public class SendUserInfoThread extends Thread{
 			{
 				int rating = 0;
 				for(User user: Login.main.getUserList())
-					if(user.getName().equals(MainMenu.userName))
+					if(user.name.equals(MainMenu.userName))
 						rating = user.rating;
 				
 				DatagramPacket datagram = PacketFactory.newMeshUser(MainMenu.userName, rating, SendDataThread.inetAddress, SendDataThread.port);

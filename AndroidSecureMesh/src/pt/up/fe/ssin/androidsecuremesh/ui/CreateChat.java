@@ -40,7 +40,7 @@ public class CreateChat extends Activity {
 		
 		
 		Intent intent = getIntent();
-		userName = intent.getStringExtra(Login.userName);
+		userName = Storage.myData.name;
 		
 		chatRoomName = (EditText) findViewById(R.id.chatName);
 		//chatRoomKey = (EditText) findViewById(R.id.chatPassword);
@@ -51,7 +51,9 @@ public class CreateChat extends Activity {
 			@Override
 			public void onClick(View v) {
 				Chat chat = new Chat(chatRoomName.getText().toString());
-				//chat.setKey(chatRoomKey.getText().toString());
+				chat.generateKey(null);
+				chat.ownerIp = Storage.getIPAddress(true);
+				
 				boolean found = false;
 				for (Chat c : Storage.myData.ownedChats)
 					if (c.name == c.name)
@@ -68,7 +70,7 @@ public class CreateChat extends Activity {
 				
 				
 				
-				//Login.main.addToChatList(chat);
+				Login.main.addToChatList(chat);
 				
 				
 				Intent intent = new Intent(CreateChat.this, EnterChatRoom.class);

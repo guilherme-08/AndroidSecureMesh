@@ -7,51 +7,55 @@ import javax.crypto.Cipher;
 
 public class CryptoUtils {
 
-	public static boolean encrypt(PublicKey k, byte[] plainText) //RSA!
+	public static byte[] encrypt(PublicKey k, byte[] plainText) //RSA!
 	{
 		Cipher rsaCipher = null;
 		try {
-			rsaCipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding", "SC");
+			rsaCipher = Cipher.getInstance("RSA", "SC");
 			rsaCipher.init(Cipher.ENCRYPT_MODE, k);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			return null;
 		} 
-		
+		byte[] cipherText = null;
 		try {
-			plainText = rsaCipher.doFinal(plainText);
+			cipherText = rsaCipher.doFinal(plainText);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			return null;
 		} 
 		
-		return true;
+		
+		return cipherText;
 	}
 	
-	public static boolean decrypt(PrivateKey k, byte[] plainText) //RSA!
+	public static byte[] decrypt(PrivateKey k, byte[] plainText) //RSA!
 	{
+
+		byte[] newPlainText = { 0, 0, 0};
 		Cipher rsaCipher = null;
 		try {
-			rsaCipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding", "SC");
+			rsaCipher = Cipher.getInstance("RSA", "SC");
 			rsaCipher.init(Cipher.DECRYPT_MODE, k);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			return null;
 		} 
 		
 		try {
-			plainText = rsaCipher.doFinal(plainText);
+			newPlainText = rsaCipher.doFinal(plainText);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			return null;
 		} 
 		
-		return true;
-	}
+		return newPlainText;
+		
+		}
 	
 	
 	public static String sanitize(String dirty)

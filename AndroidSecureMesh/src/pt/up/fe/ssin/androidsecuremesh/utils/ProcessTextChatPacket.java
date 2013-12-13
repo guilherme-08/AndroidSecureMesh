@@ -2,6 +2,7 @@ package pt.up.fe.ssin.androidsecuremesh.utils;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -21,11 +22,7 @@ public class ProcessTextChatPacket extends AsyncTask<byte[], Void, String>{
 	protected String doInBackground(byte[]... packet) {
 		byte[] ChatNameByte = new byte[ReversePacketFactory.ChatNameSize];
 
-		byte[] UserNameByte = new byte[ReversePacketFactory.UserNameSize];
-
-		//TODO keys missing
-
-		byte[] TextByte = new byte[ReversePacketFactory.TextSize];
+			byte[] TextByte = new byte[ReversePacketFactory.TextSize];
 
 		for(int i=ReversePacketFactory.IntSize; i<(ReversePacketFactory.IntSize + ReversePacketFactory.ChatNameSize); i++)
 			ChatNameByte[i - ReversePacketFactory.IntSize] = packet[0][i];
@@ -36,9 +33,7 @@ public class ProcessTextChatPacket extends AsyncTask<byte[], Void, String>{
 		if(!chatName.equals(EnterChatRoom.chosenChat.getName()))
 			return null;
 		
-		for(int i=(ReversePacketFactory.IntSize + ReversePacketFactory.ChatNameSize); i<(ReversePacketFactory.IntSize + ReversePacketFactory.ChatNameSize + ReversePacketFactory.UserNameSize); i++)
-			UserNameByte[i -(ReversePacketFactory.IntSize + ReversePacketFactory.ChatNameSize)] = packet[0][i];
-
+		
 
 		for(int i=(ReversePacketFactory.IntSize + ReversePacketFactory.ChatNameSize + ReversePacketFactory.UserNameSize); i<(ReversePacketFactory.IntSize + ReversePacketFactory.ChatNameSize + ReversePacketFactory.UserNameSize + ReversePacketFactory.TextSize); i++)
 			TextByte[i -(ReversePacketFactory.IntSize + ReversePacketFactory.ChatNameSize + ReversePacketFactory.UserNameSize)] = packet[0][i];
@@ -51,12 +46,12 @@ public class ProcessTextChatPacket extends AsyncTask<byte[], Void, String>{
 			//same key for everyone!
 			Arrays.fill(keyBytes, (byte) 32);
 			
-			SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
-			Cipher ciph = Cipher.getInstance("AES");
+			SecretKeySpec key = EnterChatRoom.chosenChat.getKey();
+			Cipher ciph = Cipher.getInstance("AES/ECB/NoPadding", "SC");
 			ciph.init(Cipher.DECRYPT_MODE, key);
 			
-			//decrypted = ciph.doFinal(TextByte);
-			decrypted = TextByte;
+			decrypted = ciph.doFinal(TextByte);
+			//decrypted = TextByte;
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,17 +62,19 @@ public class ProcessTextChatPacket extends AsyncTask<byte[], Void, String>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		/*
+		
 		catch (IllegalBlockSizeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadPaddingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NoSuchProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		*/
 		
-		String userName = new String(UserNameByte);
+		
 		String text = new String(decrypted);
 
 		

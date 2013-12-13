@@ -8,13 +8,14 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.spec.RSAKeyGenParameterSpec;
 import java.util.ArrayList;
 
 
 public class User {
 
-	private String name;
+	public String name;
 	public PrivateKey privateKey;
 	public PublicKey publicKey;
 
@@ -22,13 +23,17 @@ public class User {
 	public ArrayList<Chat> ownedChats = new ArrayList<Chat>();
 	public ArrayList<Chat> nextOwnedChats = new ArrayList<Chat>();
 	
+	static {
+	    
+	}
+	
 	public User(String name)
 	{
 		this.name = name;
-		
+		Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
 		//time to key up, standard is RSA 4096bits
 		SecureRandom random = new SecureRandom(); 
-		RSAKeyGenParameterSpec spec = new RSAKeyGenParameterSpec(1024, RSAKeyGenParameterSpec.F4); 
+		RSAKeyGenParameterSpec spec = new RSAKeyGenParameterSpec(512, RSAKeyGenParameterSpec.F4); 
 		KeyPairGenerator generator = null;	
 		try {
 			generator = KeyPairGenerator.getInstance("RSA", "SC");
@@ -46,9 +51,11 @@ public class User {
 		privateKey = a.getPrivate();
 		
 	}
+
 	
-	public String getName() {
-		return name;
+	public String getName()
+	{
+		return this.name;
 	}
 	
 	public void setName(String name) {

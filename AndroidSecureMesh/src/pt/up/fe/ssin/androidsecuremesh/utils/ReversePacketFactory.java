@@ -5,11 +5,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -249,7 +254,7 @@ public class ReversePacketFactory {
 		}*/
 		
 		for(User user: Login.main.getUserList())
-			if(user.getName().equals(userName))
+			if(user.name.equals(userName))
 				return;
 		
 		Login.main.addToUserList(userName, rating);
@@ -286,7 +291,7 @@ public class ReversePacketFactory {
 		for(Chat chat: Login.main.getChatList())
 			if(chat.getName().equals(theChat.getName()))
 				for(User user: chat.getUsersList())
-					if(user.getName().equals(userName))
+					if(user.name.equals(userName))
 					{
 						chat.removeFromUsersList(user);
 					}
@@ -359,7 +364,7 @@ public class ReversePacketFactory {
 		for(Chat chat: Login.main.getChatList())
 			if(chat.getName().equals(chatName))
 				for(User user: Login.main.getUserList())
-					if(user.getName().equals(userName))
+					if(user.name.equals(userName))
 						chat.addToUsersList(user);
 	
 	
@@ -468,22 +473,77 @@ public class ReversePacketFactory {
 		chatName = CryptoUtils.sanitize(chatName);
 		
 		String IP = new String(IPByte);
+		IP = CryptoUtils.sanitize(IP);
 		Chat newChat = new Chat(chatName);
+		newChat.ownerIp = IP;
 		
 		for(Chat chat: Login.main.getChatList())
 			if(chat.getName().equals(chatName))
 				return;
 		
 		Login.main.addToChatList(newChat);
-
+		
 		if(EnterChatRoom.chatList != null)
 		{
-			NewChatAsyncTask newChatAsyncTask = new NewChatAsyncTask();
-			newChatAsyncTask.execute(newChat);
+			
+			new NewChatAsyncTask().execute(newChat);
 		}
-		//		Toast toast = Toast.makeText(ctx, "ID: " + chatName + "Name: " + Ip, Toast.LENGTH_LONG);
-		//toast.show()
 
+		
+	}
+
+
+	public static void getTCPPacketDataById(int parseInt, String pckt, String remoteIP) {
+		switch (parseInt)
+		{
+		case 0xDEADBEEF: //chat key request
+			Log.e("HELLO CRYPTO", "Handshake 2 begin");
+			String[] args = pckt.split("\\|"); 
+			String publicKey = null;
+			String chatName = args[2];
+			publicKey = pckt.substring(pckt.indexOf("|" + chatName + "|") + chatName.length() + 2, pckt.indexOf("@|@|@|@")); //I HATE MYSELF
+			
+			PublicKey actualKey = null;
+			try {
+				actualKey = 
+					    KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(publicKey.getBytes("ISO-8859-1")));
+			} catch (InvalidKeySpecException e) {
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+			
+			byte[] chatKey = Main.getChatByName(chatName).getKey().getEncoded();
+			
+			Cipher rsaCipher = null;
+			try {
+				rsaCipher = Cipher.getInstance("RSA", "SC");
+				rsaCipher.init(Cipher.ENCRYPT_MODE, actualKey);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			byte[] cipherText = null;
+			try {
+				cipherText = rsaCipher.doFinal(chatKey);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			} 
+			
+		
+			
+			String newPacket = PacketFactory.createChatAcceptance(cipherText) + "@|@|@|@" + remoteIP;
+			SendTCPThread.textList.add(newPacket);
+			Log.e("HELLO CRYPTO", "Handshake 2 end");
+			break;
+		}
+		
 	}
 
 

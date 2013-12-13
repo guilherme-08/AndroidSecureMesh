@@ -10,6 +10,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 public class SendTCPThread extends Thread{
 
 	private Socket socket;
@@ -26,35 +28,47 @@ public class SendTCPThread extends Thread{
 		port = 8080;
 		textList = new ArrayList<String>();
 
-		try {
-			srvAddress = InetAddress.getByName(Storage.getIPAddress(true));
-		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
-		try {
-			socket = new Socket(srvAddress, port);
+		while(true)
+		{
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-			while(true)
+
+			if(textList.size() != 0)
 			{
+				String IP = textList.get(0).substring(textList.get(0).lastIndexOf("@|@|@|@") + 7);
+				Log.i("HELLO TCP", "Sending packet to IP " + IP);
+				if (IP.indexOf("|") != -1)
+					IP = IP.substring(0, IP.indexOf("|"));
 				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
+					srvAddress = InetAddress.getByName(IP);
+				} catch (UnknownHostException e1) {
+					
+					e1.printStackTrace();
+					continue;
+				}
+
+				try 
+				{
+					socket = new Socket(srvAddress, port);
+
+					out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
+					out.println(textList.get(0));
+					textList.remove(0);			
+				} 
+				catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				while(textList.size() != 0)
-				{
-					out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
-					out.println(textList.get(0));
-					textList.remove(0);
-				}
 
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }
+
+

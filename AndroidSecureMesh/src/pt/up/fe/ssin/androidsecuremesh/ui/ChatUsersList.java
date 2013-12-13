@@ -57,7 +57,7 @@ public class ChatUsersList extends Fragment {
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int pos, long id) {
 				final User user = (User) usersListView.getItemAtPosition(pos);
-				String userName = user.getName();
+				String userName = user.name;
 				String text = "Username: " + userName + "\nRating: " + Integer.toString(user.rating) + "\nPublic Key: " + User.bytesToHex(user.publicKey.getEncoded());
 			/*	Toast test = Toast.makeText(arg1.getContext(), text, Toast.LENGTH_SHORT);
 				test.show();*/
