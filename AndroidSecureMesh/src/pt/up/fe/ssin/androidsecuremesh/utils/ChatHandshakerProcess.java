@@ -15,6 +15,8 @@ public class ChatHandshakerProcess extends AsyncTask<Object, Void, Void>{
 	@Override
 	protected Void doInBackground(final Object... params) {
 		String IP = ((Chat) params[0]).ownerIp;
+		if (IP.indexOf("|") != -1)
+			IP = IP.substring(0, IP.indexOf("|"));
 		String packetSorta = PacketFactory.askChatAcceptance( ((Chat) params[0]).name) ;
 		SendTCPThread.textList.add(packetSorta + "@|@|@|@" + IP);
 		Log.e("HELLO CRYPTO", "Handshake 1");

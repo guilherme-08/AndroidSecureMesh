@@ -58,7 +58,7 @@ public class Login extends Activity {
 				}
 			}
 			setContentView(R.layout.login);
-
+			Storage.ctx = this;
 			username = (EditText) findViewById(R.id.username);
 			getIntoTheMesh = (Button) findViewById(R.id.login);
 			getIntoTheMesh.setOnClickListener(new View.OnClickListener() {
