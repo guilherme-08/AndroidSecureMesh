@@ -23,7 +23,6 @@ public class Login extends Activity {
 
 	private EditText username;
 	private Button getIntoTheMesh;
-	public static String userName = "";
 	public static Main main = null;
 
 
@@ -31,7 +30,7 @@ public class Login extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-
+		
 		if(!isWifiAvailable())
 		{
 			Toast toast = Toast.makeText(getApplicationContext(), "You must be connected to a Wi-fi network!", Toast.LENGTH_LONG);
@@ -52,9 +51,7 @@ public class Login extends Activity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					DatagramPacket datagram = PacketFactory.createTextPacket("feup", "seguranca", Storage.myData.publicKey, null, SendDataThread.inetAddress, SendDataThread.port);
 					
-					SendDataThread.datagramsArray.add(datagram);
 				} catch (IOException e) {
 					Toast toast = Toast.makeText(getApplicationContext(), "Problem when creating multicastSocket", Toast.LENGTH_LONG);
 					toast.show();
@@ -64,7 +61,6 @@ public class Login extends Activity {
 
 			username = (EditText) findViewById(R.id.username);
 			getIntoTheMesh = (Button) findViewById(R.id.login);
-
 			getIntoTheMesh.setOnClickListener(new View.OnClickListener() {
 
 				@Override
@@ -79,7 +75,8 @@ public class Login extends Activity {
 					else
 					{
 						
-						
+
+						Storage.myData.name = username.getText().toString();
 						while (SendDataThread.inetAddress == null)
 							try {
 								Thread.sleep(100);
@@ -92,7 +89,6 @@ public class Login extends Activity {
 						SendDataThread.datagramsArray.add(datagram);
 						
 						Intent intent = new Intent(Login.this, MainMenu.class);
-						intent.putExtra(userName, username.getText().toString());
 						startActivity(intent);
 					}
 				}

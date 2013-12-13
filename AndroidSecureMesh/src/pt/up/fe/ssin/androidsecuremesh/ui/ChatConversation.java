@@ -62,7 +62,7 @@ public class ChatConversation extends Fragment {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					DatagramPacket datagram = PacketFactory.sendTextToChat(EnterChatRoom.chosenChat.getName(), message, MainMenu.userName, null,SendDataThread.inetAddress, SendDataThread.port);
+					DatagramPacket datagram = PacketFactory.sendTextToChat(EnterChatRoom.chosenChat, message, MainMenu.userName, null,SendDataThread.inetAddress, SendDataThread.port);
 					
 					SendDataThread.datagramsArray.add(datagram);
 					

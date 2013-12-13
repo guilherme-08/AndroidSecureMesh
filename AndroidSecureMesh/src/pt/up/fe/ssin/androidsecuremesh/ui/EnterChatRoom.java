@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
+import pt.up.fe.ssin.androidsecuremesh.utils.ChatHandshakerProcess;
 import pt.up.fe.ssin.androidsecuremesh.utils.Main;
 import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
 import pt.up.fe.ssin.androidsecuremesh.utils.ReversePacketFactory;
@@ -65,7 +67,7 @@ public class EnterChatRoom extends Activity {
 			{
 				final Chat thechat = chatList.get(position);
 
-				String message = "Are you sure do you want to enter in the chat room \"" + thechat + "\"?";
+				String message = "Are you sure do you want to enter the chat room named \"" + thechat + "\"?";
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(EnterChatRoom.this);
 
 				alertDialogBuilder.setTitle("Enter a Chat Room");
@@ -75,9 +77,8 @@ public class EnterChatRoom extends Activity {
 				.setCancelable(false)
 				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						User me = Login.main.getUserByUsername(MainMenu.userName);
-						thechat.addToUsersList(me);
-						chosenChat = Login.main.getChatByName(thechat.getName());
+						User me = Storage.myData;
+						chosenChat = Main.getChatByName(thechat.getName());
 
 						while (SendDataThread.inetAddress == null)
 							try {
@@ -86,6 +87,21 @@ public class EnterChatRoom extends Activity {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+						
+						if (!chosenChat.hasKey())
+						{
+							try {
+								new ChatHandshakerProcess().execute(chosenChat).get();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+
+						thechat.addToUsersList(me);
 						DatagramPacket datagram = PacketFactory.newChatUser(MainMenu.userName, EnterChatRoom.chosenChat, SendDataThread.inetAddress, SendDataThread.port);
 
 						SendDataThread.datagramsArray.add(datagram);

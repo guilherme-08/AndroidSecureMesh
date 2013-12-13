@@ -6,11 +6,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Arrays;
@@ -105,10 +107,71 @@ public class PacketFactory {
 		//same key for everyone!
 		Arrays.fill(keyBytes, (byte) 32);
 		
-		SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
+		SecretKeySpec key = new SecretKeySpec(keyBytes, "AES/ECB/NoPadding");
 		
 		try {
-			Cipher ciph = Cipher.getInstance("AES");
+			Cipher ciph = Cipher.getInstance("AES/ECB/NoPadding", "SC");
+			ciph.init(Cipher.ENCRYPT_MODE, key);
+			encryptedTextByte = ciph.doFinal(textByte);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		byteBuffer.putInt(1);
+		byteBuffer.put(nameByte);
+		byteBuffer.put(encryptedTextByte);
+		byteBuffer.put(IPByte);
+		//byteBuffer.put(chatKeyByte);
+		
+		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
+
+		return datagramPacket;
+	}
+
+
+
+	public static DatagramPacket sendTextToChat(Chat chat, String text, String userName, SecretKeySpec key, InetAddress host, int port) //notString
+	{
+		byte[] packet = new byte[IntSize + ChatNameSize + UserNameSize + TextSize*2];
+		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
+
+		
+		byte[] chatNameByte = new byte[ChatNameSize];
+		ByteBuffer byteBufferChatName = ByteBuffer.wrap(chatNameByte);
+		byteBufferChatName.put(chat.name.getBytes());
+		
+
+		byte[] userNameByte = new byte[UserNameSize];
+		ByteBuffer byteBufferName = ByteBuffer.wrap(userNameByte);
+		byteBufferName.put(userName.getBytes());
+
+
+		byte[] textByte = new byte[TextSize];
+		ByteBuffer byteBufferText = ByteBuffer.wrap(textByte);
+		byteBufferText.put(text.getBytes());
+
+		byte[] encryptedTextByte = null;
+		
+		key = chat.getKey();
+		
+		try {
+			Cipher ciph = Cipher.getInstance("AES/ECB/NoPadding");
 			ciph.init(Cipher.ENCRYPT_MODE, key);
 			encryptedTextByte = ciph.doFinal(textByte);
 		} catch (NoSuchAlgorithmException e) {
@@ -128,45 +191,10 @@ public class PacketFactory {
 			e.printStackTrace();
 		}
 		
-		byteBuffer.putInt(1);
-		byteBuffer.put(nameByte);
-		byteBuffer.put(encryptedTextByte);
-		byteBuffer.put(IPByte);
-		//byteBuffer.put(chatKeyByte);
-		
-		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
-
-		return datagramPacket;
-	}
-
-
-
-	public static DatagramPacket sendTextToChat(String chatName, String text, String userName, String key, InetAddress host, int port) //notString
-	{
-		byte[] packet = new byte[IntSize + ChatNameSize + UserNameSize + TextSize];
-		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
-
-		
-		byte[] chatNameByte = new byte[ChatNameSize];
-		ByteBuffer byteBufferChatName = ByteBuffer.wrap(chatNameByte);
-		byteBufferChatName.put(chatName.getBytes());
-		
-
-		byte[] userNameByte = new byte[UserNameSize];
-		ByteBuffer byteBufferName = ByteBuffer.wrap(userNameByte);
-		byteBufferName.put(userName.getBytes());
-
-
-		byte[] textByte = new byte[TextSize];
-		ByteBuffer byteBufferText = ByteBuffer.wrap(textByte);
-		byteBufferText.put(text.getBytes());
-
-		
-		
 		byteBuffer.putInt(3);
 		byteBuffer.put(chatNameByte);
 		byteBuffer.put(userNameByte);
-		byteBuffer.put(textByte);
+		byteBuffer.put(encryptedTextByte);
 
 
 		DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length, host, port);
@@ -255,7 +283,20 @@ public class PacketFactory {
 	}
 
 
-
+	public static String askChatAcceptance(String chatName)
+	{
+		int magicNumber = 0xDEADBEEF;
+		
+		
+		try {
+			return "" + magicNumber + "|CHATREQUEST|" + chatName + "|" + new String(Storage.myData.publicKey.getEncoded(), "ISO-8859-1");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static DatagramPacket newMeshUser(String userName, int rating,
 			InetAddress host, int port) {
 		
@@ -276,4 +317,21 @@ public class PacketFactory {
 
 		return datagramPacket;
 	}
+
+
+
+	public static String createChatAcceptance(byte[] encChatKey) {
+		String ret = null;
+		try {
+			ret = "" + 0xBAADBEEF + "|" + new String(encChatKey, "ISO-8859-1");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+
+
+
 }

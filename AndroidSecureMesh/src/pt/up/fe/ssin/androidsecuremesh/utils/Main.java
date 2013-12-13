@@ -9,20 +9,14 @@ import pt.up.fe.ssin.androidsecuremesh.ui.EnterChatRoom;
 
 public class Main {
 
-	private List<Chat> chatList;
-	private List<User> userList;
 	private SendDataThread sendDataThread;
 	private ReceiveDataThread receiveDataThread;
 	private SendTCPThread sendTCPThread;
 	private ReceiveTCPThread receiveTCPThread;
 	private SendUserInfoThread sendUserInfoThread;
-	private MulticastThread multicastThread;
 
 public Main() throws IOException
 	{
-		chatList = new ArrayList<Chat>();
-		userList = new ArrayList<User>();
-
 		receiveDataThread = new ReceiveDataThread();
 		receiveDataThread.start();
 		sendDataThread = new SendDataThread();
@@ -37,16 +31,10 @@ public Main() throws IOException
 		receiveTCPThread = new ReceiveTCPThread();
 		receiveTCPThread.start();
 		
-		/*String text = "OLA";
-		String text2 = "ADEUS";
-		SendTCPThread.textList.add(text);
-		SendTCPThread.textList.add(text2);*/
-		multicastThread = new MulticastThread();
-		multicastThread.start();
 	}
 
 	public List<Chat> getChatList() {
-		return chatList;
+		return Storage.chatsIn;
 	}
 
 	public boolean addToChatList(Chat chat) {
@@ -55,7 +43,7 @@ public Main() throws IOException
 
 		if(!containsInChatList(chat))
 		{
-			this.chatList.add(chat);	
+			Storage.chatsIn.add(chat);	
 		}
 		else
 		{
@@ -65,8 +53,8 @@ public Main() throws IOException
 		return success;
 	}
 
-	public Chat getChatByName(String chatName) {
-		for(Chat chat: chatList)
+	public static Chat getChatByName(String chatName) {
+		for(Chat chat: Storage.chatsIn)
 			if(chat.getName().equals(chatName))
 				return chat;
 		return null;
@@ -76,26 +64,26 @@ public Main() throws IOException
 
 
 	public List<User> getUserList() {
-		return userList;
+		return Storage.users;
 	}
 
 	public void addToUserList(String userName, int rating) {
 		User user = new User(userName);
 		user.rating = rating;
-		this.userList.add(user);
+		Storage.users.add(user);
 	}
 
 	public boolean containsInUserList(String username)
 	{
-		for(User user: userList)
-			if(user.getName().equals(username))
+		for(User user: Storage.users)
+			if(user.name.equals(username))
 				return true;
 		return false;
 	}
 
 	public boolean containsInChatList(Chat chatName)
 	{
-		for(Chat chat: chatList)
+		for(Chat chat: Storage.chatsIn)
 			if(chat.getName().equals(chatName))
 				return true;
 		return false;
@@ -103,32 +91,32 @@ public Main() throws IOException
 	
 	public void deleteInChatList(Chat chat, String userN)
 	{
-		for(Chat ch: chatList)
+		for(Chat ch: Storage.chatsIn)
 			if(ch.getName().equals(ch.getName()))
 				for(User user: ch.getUsersList())
-					if(user.getName().equals(userN))
+					if(user.name.equals(userN))
 						ch.removeFromUsersList(user);
 	}
 	
 	
 
 	public void deleteInUserList(String username) {
-		for(int i=0; i<userList.size(); i++)
-			if(userList.get(i).getName().equals(username))
-				userList.remove(i);
+		for(int i=0; i<Storage.users.size(); i++)
+			if(Storage.users.get(i).name.equals(username))
+				Storage.users.remove(i);
 	}
 
 	public User getUserByUsername(String userName) {
-		for(User user: userList)
-			if(user.getName().equals(userName))
+		for(User user: Storage.users)
+			if(user.name.equals(userName))
 				return user;
 		return null;
 	}
 
 	public void deleteChatItem(Chat theChat) {
 		//theChat.setName(theChat.getName().replaceAll("\u0000.*", ""));
-		for(Chat chat: chatList)
+		for(Chat chat: Storage.chatsIn)
 			if(chat.getName().equals(theChat.getName()))
-				chatList.remove(chat);
+				Storage.chatsIn.remove(chat);
 	}
 }

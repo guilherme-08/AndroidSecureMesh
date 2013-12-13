@@ -1,6 +1,8 @@
 package pt.up.fe.ssin.androidsecuremesh.ui;
 
 import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
+import pt.up.fe.ssin.androidsecuremesh.utils.CryptoUtils;
+import pt.up.fe.ssin.androidsecuremesh.utils.Storage;
 import pt.up.fe.ssin.androidsecuremesh.utils.User;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -31,11 +33,7 @@ public class MainMenu extends Activity {
 
 		specialGreetings = (TextView) findViewById(R.id.specialGreetings);
 
-		if(userName == null)
-		{
-			Intent intent = getIntent();
-			userName = intent.getStringExtra(Login.userName);
-		}
+		userName = Storage.myData.name;
 		specialGreetings.setText("Hello, " + userName + "!");
 
 		createChat = (Button) findViewById(R.id.createChat);
@@ -62,6 +60,7 @@ public class MainMenu extends Activity {
 				startActivity(intent);
 			}
 		});
+		
 	}
 
 

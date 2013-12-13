@@ -27,9 +27,7 @@ import android.widget.TextView;
 public class TestCryptoActivity extends Activity {
 
 	
-	static {
-	    Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
-	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
