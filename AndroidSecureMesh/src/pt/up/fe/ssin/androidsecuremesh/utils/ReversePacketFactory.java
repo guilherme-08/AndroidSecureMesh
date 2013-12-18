@@ -386,7 +386,8 @@ public class ReversePacketFactory {
 				if(chat.name.equals(chatName))
 					canBeSecondOwner = false;
 		
-		
+		try
+		{
 		for(User user: Login.main.getUserList()) 
 			if(user.getName().equals(userName))
 				for(User user2: ChatUsersList.usersList)
@@ -400,7 +401,12 @@ public class ReversePacketFactory {
 					}
 				}
 				
-		
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return;
+		}
 		if(ChatUsersList.usersList.isEmpty())
 			canBeSecondOwner = false;
 		

@@ -67,6 +67,8 @@ public class SendDataThread extends Thread/*AsyncTask<String, Boolean, Boolean>*
 			if(datagramsArray.size() != 0)
 			{
 				try {
+					if (datagramsArray.get(0).getData()[3] == 2)
+						Log.e("HELLO SEND", "Now broadcasting chat!");
 					multicastSocket.send(datagramsArray.get(0));
 					datagramsArray.remove(0);
 				} 

@@ -49,8 +49,7 @@ public class ReceiveTCPThread extends Thread{
 
 		try {
 			srvSocket = new ServerSocket(port);
-			
-
+		
 			while(true)
 			{
 				socket = srvSocket.accept();
