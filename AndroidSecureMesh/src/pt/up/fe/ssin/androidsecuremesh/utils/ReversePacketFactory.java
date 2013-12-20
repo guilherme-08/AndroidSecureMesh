@@ -48,6 +48,7 @@ public class ReversePacketFactory {
 	private static boolean once = false;
 	static int UserNameSize = PacketFactory.UserNameSize;
 	static final int ChatNameSize = PacketFactory.ChatNameSize;
+	public static final int CryptedChatNameSize = PacketFactory.CryptedChatNameSize;
 	public static boolean existsUser = false;
 	public static boolean answer = false; 
 
@@ -458,7 +459,13 @@ public class ReversePacketFactory {
 
 
 	private static void sendTextToChat(byte[] packet) {
-		new ProcessTextChatPacket().execute(packet);
+		byte[] usernameByte = new byte[ReversePacketFactory.UserNameSize];
+		for(int i=(ReversePacketFactory.IntSize + ReversePacketFactory.ChatNameSize); i<(ReversePacketFactory.IntSize + ReversePacketFactory.ChatNameSize + ReversePacketFactory.UserNameSize ); i++)
+			usernameByte[i -(ReversePacketFactory.IntSize + ReversePacketFactory.ChatNameSize)] = packet[i];
+
+		
+		
+		new ProcessTextChatPacket().execute(packet, usernameByte);
 	}
 
 
@@ -508,7 +515,8 @@ public class ReversePacketFactory {
 			String[] args = pckt.split("\\|"); 
 			String publicKey = null;
 			String chatName = args[2];
-			publicKey = pckt.substring(pckt.indexOf("|" + chatName + "|") + chatName.length() + 2, pckt.indexOf("@|@|@|@")); //I HATE MYSELF
+			String username = args[3];
+			publicKey = pckt.substring(pckt.indexOf("|" + username + "|") + username.length() + 2, pckt.indexOf("@|@|@|@")); //I HATE MYSELF
 			
 			PublicKey actualKey = null;
 			try {

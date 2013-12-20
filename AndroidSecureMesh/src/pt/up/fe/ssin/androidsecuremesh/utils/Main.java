@@ -107,7 +107,7 @@ public Main() throws IOException
 				Storage.users.remove(i);
 	}
 
-	public User getUserByUsername(String userName) {
+	public static User getUserByUsername(String userName) {
 		for(User user: Storage.users)
 			if(user.name.equals(userName))
 				return user;

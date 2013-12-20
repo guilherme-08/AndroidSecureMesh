@@ -87,7 +87,7 @@ public class Login extends Activity {
 						DatagramPacket datagram = PacketFactory.newMeshUser(username.getText().toString(), 100, SendDataThread.inetAddress, SendDataThread.port);
 						
 						SendDataThread.datagramsArray.add(datagram);
-						
+						Storage.users.add(Storage.myData);
 						Intent intent = new Intent(Login.this, MainMenu.class);
 						startActivity(intent);
 					}

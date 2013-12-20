@@ -7,6 +7,7 @@ import java.util.List;
 import pt.up.fe.ssin.androidsecuremesh.utils.Chat;
 import pt.up.fe.ssin.androidsecuremesh.utils.PacketFactory;
 import pt.up.fe.ssin.androidsecuremesh.utils.SendDataThread;
+import pt.up.fe.ssin.androidsecuremesh.utils.Storage;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -62,7 +63,7 @@ public class ChatConversation extends Fragment {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					DatagramPacket datagram = PacketFactory.sendTextToChat(EnterChatRoom.chosenChat, message, MainMenu.userName, null,SendDataThread.inetAddress, SendDataThread.port);
+					DatagramPacket datagram = PacketFactory.sendTextToChat(EnterChatRoom.chosenChat, message, Storage.myData.name, null,SendDataThread.inetAddress, SendDataThread.port);
 					
 					SendDataThread.datagramsArray.add(datagram);
 					

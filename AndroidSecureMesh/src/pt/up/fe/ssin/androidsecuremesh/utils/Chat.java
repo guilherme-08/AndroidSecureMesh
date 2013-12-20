@@ -29,6 +29,11 @@ public class Chat {
 		else
 			name = _name;
 	}
+	
+	public boolean isMine()
+	{
+		return (owner.name == Storage.myData.name);
+	}
 
 	public String getName() {
 		return name;

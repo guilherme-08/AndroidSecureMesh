@@ -73,6 +73,7 @@ public class PacketFactory {
 
 	static final int ChatKeySize = 256;
 	public static final int CHAT_SIZE = NameSize + ChatKeySize + TextSize + IPSize + IntSize;
+	public static final int CryptedChatNameSize = 64;
 
 	public static DatagramPacket createTextPacket(String name, String text, PublicKey ownerKey, SecretKeySpec chatKey, InetAddress host, int port)
 	{
@@ -148,7 +149,7 @@ public class PacketFactory {
 
 	public static DatagramPacket sendTextToChat(Chat chat, String text, String userName, SecretKeySpec key, InetAddress host, int port) //notString
 	{
-		byte[] packet = new byte[IntSize + ChatNameSize + UserNameSize + TextSize*2];
+		byte[] packet = new byte[IntSize + ChatNameSize + UserNameSize + CryptedChatNameSize + TextSize*2];
 		ByteBuffer byteBuffer = ByteBuffer.wrap(packet);
 
 		
@@ -166,14 +167,28 @@ public class PacketFactory {
 		ByteBuffer byteBufferText = ByteBuffer.wrap(textByte);
 		byteBufferText.put(text.getBytes());
 
+		byte[] cryptedChatNameByte = new byte[CryptedChatNameSize];
+		ByteBuffer cChatNameByte = ByteBuffer.wrap(cryptedChatNameByte);
+		
 		byte[] encryptedTextByte = null;
-		
+		byte[] encryptedChatNameByte = null;
 		key = chat.getKey();
-		
+		String test;
 		try {
 			Cipher ciph = Cipher.getInstance("AES/ECB/NoPadding");
 			ciph.init(Cipher.ENCRYPT_MODE, key);
 			encryptedTextByte = ciph.doFinal(textByte);
+			 
+			ciph = Cipher.getInstance("RSA", "SC");
+			ciph.init(Cipher.ENCRYPT_MODE, Storage.myData.privateKey);
+			encryptedChatNameByte = ciph.doFinal(chatNameByte);
+			cChatNameByte.put(encryptedChatNameByte);
+		
+			//sanity
+			ciph.init(Cipher.DECRYPT_MODE, Storage.myData.publicKey);
+			byte[] hello = ciph.doFinal(encryptedChatNameByte);
+			test = new String(hello);
+		
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -189,11 +204,17 @@ public class PacketFactory {
 		} catch (BadPaddingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NoSuchProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
 		
 		byteBuffer.putInt(3);
 		byteBuffer.put(chatNameByte);
 		byteBuffer.put(userNameByte);
+		byteBuffer.put(cryptedChatNameByte);
 		byteBuffer.put(encryptedTextByte);
 
 
@@ -289,7 +310,7 @@ public class PacketFactory {
 		
 		
 		try {
-			return "" + magicNumber + "|CHATREQUEST|" + chatName + "|" + new String(Storage.myData.publicKey.getEncoded(), "ISO-8859-1");
+			return "" + magicNumber + "|CHATREQUEST|" + chatName + "|" + Storage.myData.name + "|" + new String(Storage.myData.publicKey.getEncoded(), "ISO-8859-1");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

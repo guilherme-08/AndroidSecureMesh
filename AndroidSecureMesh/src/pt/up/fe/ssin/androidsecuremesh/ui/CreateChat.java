@@ -53,6 +53,7 @@ public class CreateChat extends Activity {
 				Chat chat = new Chat(chatRoomName.getText().toString());
 				chat.generateKey(null);
 				chat.ownerIp = Storage.getIPAddress(true);
+				chat.setOwner(Storage.myData);
 				
 				boolean found = false;
 				for (Chat c : Storage.myData.ownedChats)
