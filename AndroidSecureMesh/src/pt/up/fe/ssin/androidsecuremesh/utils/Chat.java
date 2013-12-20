@@ -32,6 +32,8 @@ public class Chat {
 	
 	public boolean isMine()
 	{
+		if (owner == null)
+			return false;
 		return (owner.name == Storage.myData.name);
 	}
 
